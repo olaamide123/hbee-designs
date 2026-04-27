@@ -2710,6 +2710,7 @@
 
         // re-attach thumbnail listeners
         attachThumbListeners(grid);
+        observeReveal(grid);
       });
     }
 
@@ -2728,7 +2729,7 @@
       items.forEach((item, i) => {
         const theme = item.colorTheme || 'tst-pink';
         grid.innerHTML += `
-          <div class="tst-card ${theme} reveal" style="${rots[i % rots.length]}">
+          <div class="tst-card ${theme} reveal visible" style="${rots[i % rots.length]}">
             <span class="tst-mark">"</span>
             <p class="tst-quote">${item.quote}</p>
             <div class="tst-footer">
@@ -2737,6 +2738,7 @@
             </div>
           </div>`;
       });
+      observeReveal(grid);
     }
 
     /* ── Bootstrap CMS data (falls back to hardcoded if empty) ── */
@@ -2885,7 +2887,7 @@
       const delays = ['', 'reveal-d1', 'reveal-d2', 'reveal-d3', 'reveal-d4'];
       const isLast = i => i === p.steps.length - 1;
       list.innerHTML = p.steps.map((step, i) =>
-        `<li class="proc-item reveal ${delays[i] || ''}">
+        `<li class="proc-item reveal visible ${delays[i] || ''}">
           <div class="proc-num-circle">${i+1}</div>
           <div class="proc-body">
             <h4>${step.title || ''}</h4>
@@ -3106,6 +3108,10 @@
     }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
 
     revealEls.forEach(el => revealObs.observe(el));
+
+    function observeReveal(root) {
+      (root || document).querySelectorAll('.reveal:not(.visible)').forEach(el => revealObs.observe(el));
+    }
 
     /* ── Nav active state on scroll ───────────────────────────── */
     const sections  = document.querySelectorAll('section[id], header[id]');
