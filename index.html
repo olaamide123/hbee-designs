@@ -808,19 +808,31 @@
       opacity: 0; transition: opacity 340ms;
     }
     .multi-img.is-active { opacity: 1; }
-    .multi-dots {
-      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 7px; z-index: 5;
-      padding: 5px 10px; border-radius: 999px;
-      background: rgba(0,0,0,0.42); backdrop-filter: blur(6px);
+    /* Thumbnail strip — overlaid bottom-left of image */
+    .multi-thumbs {
+      position: absolute; bottom: 10px; left: 10px; z-index: 6;
+      display: flex; gap: 5px;
+      padding: 6px; border-radius: 10px;
+      background: rgba(0,0,0,0.48); backdrop-filter: blur(8px);
+      max-width: calc(100% - 20px);
+      overflow-x: auto; scrollbar-width: none;
     }
-    .multi-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      border: none; padding: 0; cursor: pointer;
-      background: rgba(255,255,255,0.4);
-      transition: all 220ms;
+    .multi-thumbs::-webkit-scrollbar { display: none; }
+    .multi-thumb {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 5px; overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer; padding: 0; background: none;
+      transition: border-color 200ms, opacity 200ms;
+      opacity: 0.55;
     }
-    .multi-dot.is-active { background: #fff; transform: scale(1.3); }
+    .multi-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      pointer-events: none;
+    }
+    .multi-thumb.is-active { border-color: var(--pink); opacity: 1; }
+    .multi-thumb:hover { opacity: 0.85; }
     .multi-badge {
       position: absolute; top: 10px; right: 10px; z-index: 5;
       font-family: "JetBrains Mono", monospace; font-size: 10px;
@@ -897,7 +909,7 @@
       opacity: 0; transition: opacity 240ms;
       pointer-events: none;
     }
-    .port-card:hover .port-card-veil { opacity: 1; pointer-events: none; }
+    .port-card-visual:hover:not(:has(.multi-thumbs:hover)) .port-card-veil { opacity: 1; pointer-events: none; }
     .veil-arrow { font-size: 30px; }
     .port-card-info { padding-top: 14px; }
     .port-card-num {
@@ -1318,6 +1330,14 @@
       /* Contact cards — reduce padding, disable shift hover */
       .contact-card { padding: 22px; }
       .contact-card:hover { transform: none; box-shadow: none; }
+
+      /* Multi-image thumbnails — tighter on phones */
+      .multi-thumbs { bottom: 7px; left: 7px; gap: 4px; padding: 4px; }
+      .multi-thumb  { width: 34px; height: 34px; }
+
+      /* Show only first 4 cards by default on mobile */
+      .port-card:nth-child(n+5):not(.port-extra) { display: none; }
+      .port-panel.show-all .port-card:nth-child(n+5):not(.port-extra) { display: block; }
     }
 
     /* ── Small phone (≤400px) ──────────────────────────────────── */
@@ -1330,6 +1350,10 @@
 
       /* Footer wordmark */
       .foot-big   { font-size: clamp(40px, 13vw, 280px); }
+
+      /* Multi-image thumbnails */
+      .multi-thumbs { bottom: 6px; left: 6px; gap: 3px; padding: 4px; }
+      .multi-thumb  { width: 30px; height: 30px; border-radius: 4px; }
     }
 
     /* ── iPhone / standard phone (≤375px) ──────────────────────── */
@@ -1886,13 +1910,12 @@
             <img class="multi-img" src="PRINT%20DESIGNS/ATRADER%20BOX.png" alt="ATrader Box">
             <img class="multi-img" src="PRINT%20DESIGNS/ATRADER%20GREEN%20NOTEPAD.png" alt="ATrader Notepad">
             <img class="multi-img" src="PRINT%20DESIGNS/ATRADER%20PEN%20WHITE.png" alt="ATrader Pen">
-            <div class="multi-dots">
-              <button class="multi-dot is-active" aria-label="Bag"></button>
-              <button class="multi-dot" aria-label="Box"></button>
-              <button class="multi-dot" aria-label="Notepad"></button>
-              <button class="multi-dot" aria-label="Pen"></button>
+            <div class="multi-thumbs">
+              <button class="multi-thumb is-active" data-idx="0"><img src="PRINT%20DESIGNS/ATRADER%20BAG%20WHITE.png" alt="Bag"></button>
+              <button class="multi-thumb" data-idx="1"><img src="PRINT%20DESIGNS/ATRADER%20BOX.png" alt="Box"></button>
+              <button class="multi-thumb" data-idx="2"><img src="PRINT%20DESIGNS/ATRADER%20GREEN%20NOTEPAD.png" alt="Notepad"></button>
+              <button class="multi-thumb" data-idx="3"><img src="PRINT%20DESIGNS/ATRADER%20PEN%20WHITE.png" alt="Pen"></button>
             </div>
-            <span class="multi-badge">4 items</span>
             <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
           </div>
           <div class="port-card-info">
@@ -1908,12 +1931,11 @@
             <img class="multi-img is-active" src="PRINT%20DESIGNS/B1.png" alt="Print Series 1">
             <img class="multi-img" src="PRINT%20DESIGNS/B2.png" alt="Print Series 2">
             <img class="multi-img" src="PRINT%20DESIGNS/B3.png" alt="Print Series 3">
-            <div class="multi-dots">
-              <button class="multi-dot is-active" aria-label="Design 1"></button>
-              <button class="multi-dot" aria-label="Design 2"></button>
-              <button class="multi-dot" aria-label="Design 3"></button>
+            <div class="multi-thumbs">
+              <button class="multi-thumb is-active" data-idx="0"><img src="PRINT%20DESIGNS/B1.png" alt="Design 1"></button>
+              <button class="multi-thumb" data-idx="1"><img src="PRINT%20DESIGNS/B2.png" alt="Design 2"></button>
+              <button class="multi-thumb" data-idx="2"><img src="PRINT%20DESIGNS/B3.png" alt="Design 3"></button>
             </div>
-            <span class="multi-badge">3 items</span>
             <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
           </div>
           <div class="port-card-info">
@@ -2742,13 +2764,19 @@
           card.dataset.cat = item.label || item.category;
 
           const imgs = item.images || [];
+          const thumbsHtml = isMulti
+            ? `<div class="multi-thumbs">${imgs.map((img, j) => `<button class="multi-thumb${j===0?' is-active':''}" data-idx="${j}"><img src="${sanityImgUrl(img.asset._ref)}" alt="${item.title}" loading="lazy"></button>`).join('')}</div>`
+            : '';
+
           const visualHtml = isMulti
             ? `<div class="port-card-visual" style="position:relative;aspect-ratio:3/4;overflow:hidden;">
                 ${imgs.map((img, j) => `<img class="multi-img${j===0?' is-active':''}" src="${sanityImgUrl(img.asset._ref)}" alt="${item.title}" loading="lazy">`).join('')}
-                <div class="multi-dots">${imgs.map((_,j) => `<button class="multi-dot${j===0?' is-active':''}" data-idx="${j}"></button>`).join('')}</div>
+                ${thumbsHtml}
+                <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
               </div>`
             : `<div class="port-card-visual" style="aspect-ratio:3/4;overflow:hidden;">
                 <img src="${sanityImgUrl(imgs[0]?.asset?._ref)}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">
+                <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
               </div>`;
 
           card.innerHTML = `
@@ -2757,25 +2785,13 @@
               <span class="port-card-cat">${item.label || ''}</span>
               <span class="port-card-title">${item.title}</span>
               ${item.year ? `<span class="port-card-year">${item.year}</span>` : ''}
-            </div>
-            <div class="port-card-veil"><span class="pv-icon">⊕</span></div>`;
+            </div>`;
 
           grid.appendChild(card);
         });
 
-        // re-attach multi-dot listeners
-        grid.querySelectorAll('.port-card--multi').forEach(card => {
-          const imgs = card.querySelectorAll('.multi-img');
-          const dots = card.querySelectorAll('.multi-dot');
-          dots.forEach(dot => {
-            dot.addEventListener('click', e => {
-              e.preventDefault(); e.stopPropagation();
-              const idx = +dot.dataset.idx;
-              imgs.forEach((img, i) => img.classList.toggle('is-active', i === idx));
-              dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-            });
-          });
-        });
+        // re-attach thumbnail listeners
+        attachThumbListeners(grid);
       });
     }
 
@@ -2997,6 +3013,13 @@
         barBtn.querySelector('.sb-label').textContent = isOpen ? 'See Less' : 'See All ' + barBtn.dataset.label;
         barBtn.querySelector('.see-more-bar-count').textContent = isOpen ? '' : '+' + extras + ' more';
       }
+
+      /* when collapsing, scroll panel top into view so the page doesn't jump */
+      if (!isOpen) {
+        setTimeout(() => {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 30);
+      }
     }
 
     seeMoreBtn.addEventListener('click', () => toggleSeeMore(seeMoreBtn.dataset.panel));
@@ -3035,20 +3058,21 @@
     sections.forEach(s => activeObs.observe(s));
 
     /* ── Multi-image card dots ────────────────────────────────── */
-    document.querySelectorAll('.port-card--multi').forEach(card => {
-      const imgs = card.querySelectorAll('.multi-img');
-      const dots = card.querySelectorAll('.multi-dot');
-      dots.forEach((dot, i) => {
-        dot.addEventListener('click', e => {
-          e.preventDefault();
-          e.stopPropagation();
-          imgs.forEach(img => img.classList.remove('is-active'));
-          dots.forEach(d => d.classList.remove('is-active'));
-          imgs[i].classList.add('is-active');
-          dot.classList.add('is-active');
+    function attachThumbListeners(root) {
+      (root || document).querySelectorAll('.port-card--multi').forEach(card => {
+        const imgs   = card.querySelectorAll('.multi-img');
+        const thumbs = card.querySelectorAll('.multi-thumb');
+        thumbs.forEach(thumb => {
+          thumb.addEventListener('click', e => {
+            e.preventDefault(); e.stopPropagation();
+            const idx = +thumb.dataset.idx;
+            imgs.forEach((img, i)     => img.classList.toggle('is-active', i === idx));
+            thumbs.forEach((t, i)     => t.classList.toggle('is-active',   i === idx));
+          });
         });
       });
-    });
+    }
+    attachThumbListeners();
 
     /* ── Lightbox ─────────────────────────────────────────────── */
     (function () {
