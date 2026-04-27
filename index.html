@@ -2662,6 +2662,150 @@
   <script>
     'use strict';
 
+    /* ── Sanity CMS ───────────────────────────────────────────── */
+    const SANITY_PROJECT = 'o7fduvas';
+    const SANITY_DATASET = 'production';
+    const SANITY_CDN     = `https://${SANITY_PROJECT}.apicdn.sanity.io/v2021-06-07/data/query/${SANITY_DATASET}`;
+
+    function sanityImgUrl(ref) {
+      if (!ref) return '';
+      // ref format: image-XXXX-WxH-ext
+      const [, id, dimensions, ext] = ref.match(/^image-(.+)-(\d+x\d+)-(\w+)$/);
+      return `https://cdn.sanity.io/images/${SANITY_PROJECT}/${SANITY_DATASET}/${id}-${dimensions}.${ext}`;
+    }
+
+    async function sanityFetch(query) {
+      const url = `${SANITY_CDN}?query=${encodeURIComponent(query)}`;
+      const res = await fetch(url);
+      const json = await res.json();
+      return json.result;
+    }
+
+    /* ── Load Portfolio from Sanity ───────────────────────────── */
+    async function loadPortfolio() {
+      const items = await sanityFetch(
+        `*[_type == "portfolioItem"] | order(order asc) { _id, title, category, label, year, images, featured }`
+      );
+      if (!items || !items.length) return;
+
+      const panels = { flyers: [], print: [], brand: [] };
+      items.forEach(item => { if (panels[item.category]) panels[item.category].push(item); });
+
+      Object.entries(panels).forEach(([cat, cards]) => {
+        const panel = document.getElementById('panel-' + cat);
+        if (!panel) return;
+        const grid = panel.querySelector('.port-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        cards.forEach((item, i) => {
+          const isExtra = !item.featured;
+          const isMulti = item.images && item.images.length > 1;
+          const card = document.createElement('a');
+          card.href = '#';
+          card.className = 'port-card' + (isExtra ? ' port-extra' : '') + (isMulti ? ' port-card--multi' : '');
+          card.dataset.title = item.title;
+          card.dataset.cat = item.label || item.category;
+
+          const imgs = item.images || [];
+          const visualHtml = isMulti
+            ? `<div class="port-card-visual" style="position:relative;aspect-ratio:3/4;overflow:hidden;">
+                ${imgs.map((img, j) => `<img class="multi-img${j===0?' is-active':''}" src="${sanityImgUrl(img.asset._ref)}" alt="${item.title}" loading="lazy">`).join('')}
+                <div class="multi-dots">${imgs.map((_,j) => `<button class="multi-dot${j===0?' is-active':''}" data-idx="${j}"></button>`).join('')}</div>
+              </div>`
+            : `<div class="port-card-visual" style="aspect-ratio:3/4;overflow:hidden;">
+                <img src="${sanityImgUrl(imgs[0]?.asset?._ref)}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">
+              </div>`;
+
+          card.innerHTML = `
+            ${visualHtml}
+            <div class="port-card-info">
+              <span class="port-card-cat">${item.label || ''}</span>
+              <span class="port-card-title">${item.title}</span>
+              ${item.year ? `<span class="port-card-year">${item.year}</span>` : ''}
+            </div>
+            <div class="port-card-veil"><span class="pv-icon">⊕</span></div>`;
+
+          grid.appendChild(card);
+        });
+
+        // re-attach multi-dot listeners
+        grid.querySelectorAll('.port-card--multi').forEach(card => {
+          const imgs = card.querySelectorAll('.multi-img');
+          const dots = card.querySelectorAll('.multi-dot');
+          dots.forEach(dot => {
+            dot.addEventListener('click', e => {
+              e.preventDefault(); e.stopPropagation();
+              const idx = +dot.dataset.idx;
+              imgs.forEach((img, i) => img.classList.toggle('is-active', i === idx));
+              dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+            });
+          });
+        });
+      });
+    }
+
+    /* ── Load Selected Jobs from Sanity ───────────────────────── */
+    async function loadSelectedJobs() {
+      const jobs = await sanityFetch(
+        `*[_type == "selectedJob"] | order(order asc) { _id, title, caseNumber, category, type, image, goal, outcome, colorTheme }`
+      );
+      if (!jobs || !jobs.length) return;
+
+      const list = document.querySelector('.cases-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      jobs.forEach(job => {
+        const theme = job.colorTheme || 'case-pink';
+        const imgUrl = sanityImgUrl(job.image?.asset?._ref);
+        list.innerHTML += `
+          <article class="case-item ${theme} reveal">
+            <div class="case-poster">
+              <img src="${imgUrl}" alt="${job.title}">
+            </div>
+            <div class="case-info">
+              <span class="case-n">${job.caseNumber || ''} · ${job.category || ''}</span>
+              <h3>${job.title}</h3>
+              <span class="case-type">${job.type || ''}</span>
+              ${job.goal ? `<div class="case-row"><strong>GOAL</strong><p>${job.goal}</p></div>` : ''}
+              ${job.outcome ? `<div class="case-row"><strong>OUTCOME</strong><p>${job.outcome}</p></div>` : ''}
+              <a class="case-link" href="#">VIEW PROJECT →</a>
+            </div>
+          </article>`;
+      });
+    }
+
+    /* ── Load Testimonials from Sanity ────────────────────────── */
+    async function loadTestimonials() {
+      const items = await sanityFetch(
+        `*[_type == "testimonial"] | order(order asc) { _id, clientName, clientRole, clientCompany, quote, colorTheme }`
+      );
+      if (!items || !items.length) return;
+
+      const grid = document.querySelector('.tst-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const rots = ['--rot:-1.5deg', '--rot:1.2deg', '--rot:-0.8deg'];
+      items.forEach((item, i) => {
+        const theme = item.colorTheme || 'tst-pink';
+        grid.innerHTML += `
+          <div class="tst-card ${theme} reveal" style="${rots[i % rots.length]}">
+            <span class="tst-mark">"</span>
+            <p class="tst-quote">${item.quote}</p>
+            <div class="tst-footer">
+              <strong>${item.clientName}</strong>
+              <span>${item.clientRole || ''}${item.clientCompany ? ' · ' + item.clientCompany : ''}</span>
+            </div>
+          </div>`;
+      });
+    }
+
+    /* ── Bootstrap CMS data (falls back to hardcoded if empty) ── */
+    Promise.all([loadPortfolio(), loadSelectedJobs(), loadTestimonials()])
+      .catch(err => console.warn('Sanity fetch failed, using static content:', err));
+
     /* ── Preloader ────────────────────────────────────────────── */
     (function () {
       const preloader = document.getElementById('preloader');
