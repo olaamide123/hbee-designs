@@ -2461,92 +2461,10 @@
   </section>
 
   <!-- ============================================================
-       SECTION 5: SELECTED JOBS (CMS-DRIVEN)
-
-       In production this section is populated from Sanity CMS.
-       Schema: selectedJob — see CSS comment above for full schema.
-       The owner adds/edits/removes/reorders jobs in Sanity Studio.
-       Setting featured = true promotes a job to the top of the list.
-  ============================================================ -->
-  <section class="selected">
-    <span class="section-num">05 / Selected Jobs</span>
-    <h2 class="selected-title reveal">SELECTED <em>jobs.</em></h2>
-    <div class="cases-list">
-
-      <!-- CMS: selectedJob — Time Square ATL NYE 2026 (featured: true) -->
-      <article class="case-item case-pink reveal">
-        <div class="case-poster">
-          <!-- CMS: mainImage from Sanity portfolioItem -->
-          <img src="Party%20Flyers/TIME%20SQUARE%20ATL%20NYE%202026.png" alt="Time Square ATL — NYE 2026 Party Flyer">
-        </div>
-        <div class="case-info">
-          <span class="case-n">CASE 01 · PARTY FLYER</span>
-          <h3>Time Square ATL — NYE 2026</h3>
-          <span class="case-type">Event Flyer · Atlanta, GA</span>
-          <div class="case-row">
-            <strong>GOAL</strong>
-            <p>A premium New Year's Eve flyer bold enough to work as a full-bleed print poster and still stop the scroll as an IG story.</p>
-          </div>
-          <div class="case-row">
-            <strong>OUTCOME</strong>
-            <p>High-energy flyer deployed across print, socials and venue screens. Sold-out night.</p>
-          </div>
-          <a class="case-link" href="#">VIEW PROJECT →</a>
-        </div>
-      </article>
-
-      <!-- CMS: selectedJob — Romeo Brown Acting Studio -->
-      <article class="case-item case-blue reveal">
-        <div class="case-poster">
-          <!-- CMS: mainImage from Sanity portfolioItem -->
-          <img src="PRINT%20DESIGNS/ROMEO%20BROWN%20ACTING%20STUDIO.png" alt="Romeo Brown Acting Studio — Print Design">
-        </div>
-        <div class="case-info">
-          <span class="case-n">CASE 02 · PRINT DESIGN</span>
-          <h3>Romeo Brown Acting Studio</h3>
-          <span class="case-type">Studio Identity · Print Collateral</span>
-          <div class="case-row">
-            <strong>GOAL</strong>
-            <p>Print collateral for a creative acting studio — bold enough to command attention on promo boards and in waiting rooms.</p>
-          </div>
-          <div class="case-row">
-            <strong>OUTCOME</strong>
-            <p>Cinematic poster suite and stationery system that immediately elevated the studio's brand presence.</p>
-          </div>
-          <a class="case-link" href="#">VIEW PROJECT →</a>
-        </div>
-      </article>
-
-      <!-- CMS: selectedJob — Regally -->
-      <article class="case-item case-yellow reveal">
-        <div class="case-poster">
-          <!-- CMS: mainImage from Sanity portfolioItem -->
-          <img src="BRAND%20DESIGNS/COMMUNITY%20OUTREACH%20ARTWORK%20DESIGN.png" alt="Community Outreach — Brand Campaign Design">
-        </div>
-        <div class="case-info">
-          <span class="case-n">CASE 03 · BRAND DESIGN</span>
-          <h3>Community Outreach Campaign</h3>
-          <span class="case-type">Brand Campaign · Artwork Design</span>
-          <div class="case-row">
-            <strong>GOAL</strong>
-            <p>A complete campaign artwork system for a community outreach programme — bold, warm, and built to travel across print and digital.</p>
-          </div>
-          <div class="case-row">
-            <strong>OUTCOME</strong>
-            <p>Full suite of branded assets deployed across merchandise, print collateral and event materials.</p>
-          </div>
-          <a class="case-link" href="#">VIEW PROJECT →</a>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- ============================================================
        SECTION 6: PROCESS
   ============================================================ -->
   <section id="process" class="process">
-    <span class="section-num">06 / Process</span>
+    <span class="section-num">05 / Process</span>
     <h2 class="process-title reveal">FROM BRIEF <em>to</em> PRINT.</h2>
     <ol class="process-list">
       <li class="proc-item reveal">
@@ -2600,7 +2518,7 @@
        The owner adds/edits/removes/reorders testimonials in Sanity Studio.
   ============================================================ -->
   <section class="testimonials">
-    <span class="section-num">07 / Reception</span>
+    <span class="section-num">06 / Reception</span>
     <h2 class="tst-title reveal">CLIENTS <em>say</em>.</h2>
     <div class="tst-grid">
 
@@ -2651,7 +2569,7 @@
       </div>
     </div>
     <div class="contact-inner">
-      <span class="section-num">08 / Contact</span>
+      <span class="section-num">07 / Contact</span>
       <h2 class="contact-title">
         NEED A <em>flyer</em> OR<br>
         PRINT DESIGN THAT<br>
@@ -2795,38 +2713,7 @@
       });
     }
 
-    /* ── Load Selected Jobs from Sanity ───────────────────────── */
-    async function loadSelectedJobs() {
-      const jobs = await sanityFetch(
-        `*[_type == "selectedJob"] | order(order asc) { _id, title, caseNumber, category, type, image, goal, outcome, colorTheme }`
-      );
-      if (!jobs || !jobs.length) return;
-
-      const list = document.querySelector('.cases-list');
-      if (!list) return;
-      list.innerHTML = '';
-
-      jobs.forEach(job => {
-        const theme = job.colorTheme || 'case-pink';
-        const imgUrl = sanityImgUrl(job.image?.asset?._ref);
-        list.innerHTML += `
-          <article class="case-item ${theme} reveal">
-            <div class="case-poster">
-              <img src="${imgUrl}" alt="${job.title}">
-            </div>
-            <div class="case-info">
-              <span class="case-n">${job.caseNumber || ''} · ${job.category || ''}</span>
-              <h3>${job.title}</h3>
-              <span class="case-type">${job.type || ''}</span>
-              ${job.goal ? `<div class="case-row"><strong>GOAL</strong><p>${job.goal}</p></div>` : ''}
-              ${job.outcome ? `<div class="case-row"><strong>OUTCOME</strong><p>${job.outcome}</p></div>` : ''}
-              <a class="case-link" href="#">VIEW PROJECT →</a>
-            </div>
-          </article>`;
-      });
-    }
-
-    /* ── Load Testimonials from Sanity ────────────────────────── */
+/* ── Load Testimonials from Sanity ────────────────────────── */
     async function loadTestimonials() {
       const items = await sanityFetch(
         `*[_type == "testimonial"] | order(order asc) { _id, clientName, clientRole, clientCompany, quote, colorTheme }`
@@ -3032,7 +2919,6 @@
       loadProcess(),
       loadContact(),
       loadPortfolio(),
-      loadSelectedJobs(),
       loadTestimonials(),
     ]).catch(err => console.warn('Sanity fetch failed, using static content:', err));
 
