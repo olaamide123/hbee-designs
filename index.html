@@ -2853,8 +2853,188 @@
     }
 
     /* ── Bootstrap CMS data (falls back to hardcoded if empty) ── */
-    Promise.all([loadPortfolio(), loadSelectedJobs(), loadTestimonials()])
-      .catch(err => console.warn('Sanity fetch failed, using static content:', err));
+    /* ── Load Site Settings ───────────────────────────────────── */
+    async function loadSiteSettings() {
+      const s = await sanityFetch(`*[_id == "siteSettings"][0]`);
+      if (!s) return;
+      // Nav CTA
+      document.querySelectorAll('.nav-cta').forEach(el => {
+        const dot = el.querySelector('.nav-cta-dot');
+        el.textContent = s.navCta || '';
+        if (dot) el.prepend(dot);
+      });
+      // Footer
+      const fc = document.querySelector('.foot-copy');
+      if (fc && s.footerCopyright) {
+        const spans = fc.querySelectorAll('span');
+        if (spans[0]) spans[0].textContent = s.footerCopyright;
+        if (spans[2] && s.footerLocation) spans[2].textContent = s.footerLocation;
+      }
+      // Contact cards
+      if (s.email) {
+        const emailCard = document.querySelector('.contact-card.cc-dark');
+        if (emailCard) {
+          emailCard.href = `mailto:${s.email}`;
+          const strong = emailCard.querySelector('strong');
+          if (strong) strong.textContent = s.email;
+        }
+      }
+      if (s.instagramUrl) {
+        const card = document.querySelector('.contact-card.cc-blue');
+        if (card) {
+          card.href = s.instagramUrl;
+          const strong = card.querySelector('strong');
+          if (strong) strong.textContent = `@${s.instagramHandle || ''}`;
+        }
+      }
+      if (s.linkedinUrl) {
+        const card = document.querySelector('.contact-card.cc-paper');
+        if (card) {
+          card.href = s.linkedinUrl;
+          const strong = card.querySelector('strong');
+          if (strong) strong.textContent = s.linkedinName || '';
+        }
+      }
+      if (s.twitterUrl) {
+        const card = document.querySelector('.contact-card.cc-yellow');
+        if (card) {
+          card.href = s.twitterUrl;
+          const strong = card.querySelector('strong');
+          if (strong) strong.textContent = s.twitterHandle || '';
+        }
+      }
+    }
+
+    /* ── Load Hero Section ────────────────────────────────────── */
+    async function loadHero() {
+      const h = await sanityFetch(`*[_id == "heroSection"][0]`);
+      if (!h) return;
+      const set = (sel, val) => { if (val) { const el = document.querySelector(sel); if (el) el.textContent = val; } };
+      set('.hl-1', h.headlineLine1);
+      const hl2 = document.querySelector('.hl-2');
+      if (hl2 && h.headlineLine2) { hl2.innerHTML = `<em>${h.headlineLine2}</em>`; }
+      set('.hl-3', h.headlineLine3);
+      set('.hl-4', h.headlineLine4);
+      if (h.blurb) {
+        const blurb = document.querySelector('.hero-blurb');
+        if (blurb) blurb.innerHTML = h.blurb.replace('Habeeb', '<strong>Habeeb</strong>');
+      }
+      const ctaBtns = document.querySelectorAll('.hero-cta .btn');
+      if (ctaBtns[0] && h.ctaPrimary) {
+        const svg = ctaBtns[0].querySelector('svg');
+        ctaBtns[0].textContent = h.ctaPrimary + ' ';
+        if (svg) ctaBtns[0].appendChild(svg);
+      }
+      if (ctaBtns[1] && h.ctaSecondary) ctaBtns[1].textContent = h.ctaSecondary;
+      // Stats
+      const metaNums = document.querySelectorAll('.meta-num');
+      const metaLabels = document.querySelectorAll('.meta-label');
+      if (metaNums[0] && h.stat1Number) metaNums[0].textContent = h.stat1Number;
+      if (metaLabels[0] && h.stat1Label) metaLabels[0].textContent = h.stat1Label;
+      if (metaNums[1] && h.stat2Number) metaNums[1].textContent = h.stat2Number;
+      if (metaLabels[1] && h.stat2Label) metaLabels[1].textContent = h.stat2Label;
+      if (metaNums[2] && h.stat3Number) metaNums[2].textContent = h.stat3Number;
+      if (metaLabels[2] && h.stat3Label) metaLabels[2].textContent = h.stat3Label;
+      // Eyebrows
+      const eyebrows = document.querySelectorAll('.eyebrow');
+      if (eyebrows[0] && h.eyebrowLeft) {
+        const dot = eyebrows[0].querySelector('.dot-pulse');
+        eyebrows[0].textContent = h.eyebrowLeft;
+        if (dot) eyebrows[0].prepend(dot);
+      }
+      if (eyebrows[1] && h.eyebrowRight) eyebrows[1].textContent = h.eyebrowRight;
+    }
+
+    /* ── Load About Section ───────────────────────────────────── */
+    async function loadAbout() {
+      const a = await sanityFetch(`*[_id == "aboutSection"][0]`);
+      if (!a) return;
+      // Headline — keep the styled structure
+      const title = document.querySelector('.about-title');
+      if (title && a.headlineLine1) {
+        const [word, ...rest] = a.headlineLine1.split(' ');
+        const name = rest.join(' ');
+        title.innerHTML = `${word} <em>${name}</em><br><span class="stroke-text">${a.headlineLine2 || ''}</span><br><span class="pink-text">${a.headlineLine3 || ''}</span>`;
+      }
+      const bio = document.querySelector('.about-body-text');
+      if (bio && a.bio) bio.textContent = a.bio;
+      const tag = document.querySelector('.portrait-tag');
+      if (tag && a.portraitTag) tag.textContent = a.portraitTag;
+    }
+
+    /* ── Load Services Section ────────────────────────────────── */
+    async function loadServices() {
+      const s = await sanityFetch(`*[_id == "servicesSection"][0]`);
+      if (!s) return;
+      const title = document.querySelector('.srv-title');
+      if (title && s.sectionTitle) title.textContent = s.sectionTitle;
+      if (!s.services || !s.services.length) return;
+      const grid = document.querySelector('.srv-grid');
+      if (!grid) return;
+      grid.innerHTML = s.services.map((svc, i) =>
+        `<div class="srv-card ${svc.colorTheme || 'srv-pink'}">
+          <div class="srv-card-top"><span>${String(i+1).padStart(2,'0')}</span><span>★</span></div>
+          <h3>${svc.title || ''}</h3>
+          <p>${svc.description || ''}</p>
+          <div class="srv-card-bot">PRICED ON BRIEF →</div>
+        </div>`
+      ).join('');
+    }
+
+    /* ── Load Process Section ─────────────────────────────────── */
+    async function loadProcess() {
+      const p = await sanityFetch(`*[_id == "processSection"][0]`);
+      if (!p) return;
+      const title = document.querySelector('.process-title');
+      if (title && p.sectionTitle) {
+        const parts = p.sectionTitle.split(' to ');
+        title.innerHTML = parts.length === 2
+          ? `${parts[0]} <em>to</em> ${parts[1]}`
+          : p.sectionTitle;
+      }
+      if (!p.steps || !p.steps.length) return;
+      const list = document.querySelector('.process-list');
+      if (!list) return;
+      const delays = ['', 'reveal-d1', 'reveal-d2', 'reveal-d3', 'reveal-d4'];
+      const isLast = i => i === p.steps.length - 1;
+      list.innerHTML = p.steps.map((step, i) =>
+        `<li class="proc-item reveal ${delays[i] || ''}">
+          <div class="proc-num-circle">${i+1}</div>
+          <div class="proc-body">
+            <h4>${step.title || ''}</h4>
+            <p>${step.description || ''}</p>
+          </div>
+          <div class="proc-arrow">${isLast(i) ? '✓' : '→'}</div>
+        </li>`
+      ).join('');
+    }
+
+    /* ── Load Contact Section ─────────────────────────────────── */
+    async function loadContact() {
+      const c = await sanityFetch(`*[_id == "contactSection"][0]`);
+      if (!c) return;
+      const title = document.querySelector('.contact-title');
+      if (title) {
+        title.innerHTML =
+          `${c.headlineLine1 ? c.headlineLine1.replace('flyer', '<em>flyer</em>') : ''}<br>
+           ${c.headlineLine2 || ''}<br>
+           <span class="c-blue">${c.headlineLine3 || ''}</span>`;
+      }
+      const sub = document.querySelector('.contact-sub');
+      if (sub && c.subtext) sub.textContent = c.subtext;
+    }
+
+    Promise.all([
+      loadSiteSettings(),
+      loadHero(),
+      loadAbout(),
+      loadServices(),
+      loadProcess(),
+      loadContact(),
+      loadPortfolio(),
+      loadSelectedJobs(),
+      loadTestimonials(),
+    ]).catch(err => console.warn('Sanity fetch failed, using static content:', err));
 
     /* ── Preloader ────────────────────────────────────────────── */
     (function () {
