@@ -1,0 +1,2961 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HBEE Designs — the graphic design studio of Habeeb. Bold print design, party flyers, event graphics, posters, business cards and promotional materials. Lagos, NG.">
+  <title>HBEE Designs — Graphic Design Studio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+
+  <style>
+    /* ── Preloader ─────────────────────────────────────────────── */
+    #preloader {
+      position: fixed; inset: 0; z-index: 99999;
+      background: #0A0A0A;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
+    }
+    .pl-brand {
+      font-family: "Anton", sans-serif;
+      font-size: clamp(13px, 1.8vw, 20px);
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #F4EDE0; opacity: 0.4;
+      margin-bottom: 16px;
+    }
+    .pl-brand span { color: #FF3D8B; opacity: 1; }
+    .pl-counter {
+      font-family: "Anton", sans-serif;
+      font-size: clamp(100px, 22vw, 240px);
+      line-height: 0.88; letter-spacing: -0.02em;
+      color: #F4EDE0;
+      display: flex; align-items: flex-start;
+    }
+    .pl-num { display: block; min-width: 3ch; text-align: right; }
+    .pl-pct {
+      font-size: 0.32em; opacity: 0.35;
+      margin-top: 0.18em; margin-left: 6px;
+    }
+    .pl-bar-wrap {
+      margin-top: 48px;
+      width: clamp(220px, 38vw, 520px);
+      height: 2px;
+      background: rgba(244,237,224,0.1);
+      border-radius: 999px; overflow: hidden;
+    }
+    .pl-bar-fill {
+      height: 100%; width: 0%;
+      background: #FF3D8B; border-radius: 999px;
+    }
+    /* exit — slides up */
+    #preloader.pl-exit {
+      transition: transform 0.72s cubic-bezier(0.76, 0, 0.24, 1);
+      transform: translateY(-100%);
+    }
+    /* ================================================================
+       DESIGN TOKENS — Dark Mode (default)
+    ================================================================ */
+    :root {
+      --bg:      #0A0A0A;
+      --bg-2:    #141414;
+      --fg:      #F4EDE0;
+      --mute:    rgba(244,237,224,0.55);
+      --line:    rgba(244,237,224,0.14);
+      --pink:    #FF3D8B;
+      --blue:    #2742FF;
+      --yellow:  #F5FF3D;
+      --nav-bg:  rgba(10,10,10,0.82);
+      --pad:     clamp(20px, 5vw, 64px);
+    }
+
+    /* ================================================================
+       DESIGN TOKENS — Light Mode
+       Intentionally different: warm cream paper, ink black, pink accents.
+    ================================================================ */
+    html[data-mode="light"] {
+      --bg:      #F5EFE2;
+      --bg-2:    #ECE4D2;
+      --fg:      #0D0D0D;
+      --mute:    rgba(13,13,13,0.55);
+      --line:    rgba(13,13,13,0.14);
+      --nav-bg:  rgba(245,239,226,0.86);
+    }
+
+    /* ================================================================
+       RESET & BASE
+    ================================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Space Grotesk", "Inter Tight", system-ui, sans-serif;
+      overflow-x: hidden;
+      transition: background 400ms ease, color 400ms ease;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    h1, h2, h3, h4 {
+      font-family: "Anton", sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+    em {
+      font-family: "Instrument Serif", serif;
+      font-style: italic;
+      font-weight: 400;
+      text-transform: lowercase;
+      letter-spacing: -0.01em;
+    }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ================================================================
+       GRAIN OVERLAY — Subtle texture across the whole page
+    ================================================================ */
+    body::after {
+      content: "";
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9998;
+      opacity: 0.06; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+    }
+    html[data-mode="light"] body::after { mix-blend-mode: multiply; opacity: 0.04; }
+
+    /* ================================================================
+       SECTION LABEL
+    ================================================================ */
+    .section-num {
+      display: block;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 14px;
+    }
+
+    /* ================================================================
+       MARQUEE TICKER
+    ================================================================ */
+    .marquee {
+      background: var(--pink); color: var(--bg);
+      border-bottom: 2px solid var(--fg);
+      overflow: hidden; padding: 10px 0;
+      font-family: "Anton", sans-serif; font-size: 17px; letter-spacing: 0.1em;
+      transition: background 400ms, border-color 400ms;
+    }
+    html[data-mode="light"] .marquee { border-bottom-color: var(--fg); }
+    .marquee-track {
+      display: inline-flex; white-space: nowrap;
+      animation: mq-scroll 30s linear infinite;
+    }
+    .marquee-track > span {
+      padding-right: 24px;
+      display: inline-flex; gap: 16px; align-items: center;
+    }
+    .marquee-track i { color: #000; font-style: normal; }
+    html[data-mode="light"] .marquee-track i { color: #000; }
+    @keyframes mq-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ================================================================
+       NAVIGATION
+    ================================================================ */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 28px;
+      padding: 18px var(--pad);
+      background: var(--nav-bg);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      border-bottom: 1px solid var(--line);
+      transition: background 400ms, border-color 400ms;
+    }
+    .nav-logo {
+      display: inline-flex; align-items: baseline; gap: 8px;
+      flex-shrink: 0;
+    }
+    .nav-dot {
+      color: var(--yellow); font-size: 18px; line-height: 0;
+      display: inline-block; transform: translateY(-2px);
+      transition: color 400ms;
+    }
+    html[data-mode="light"] .nav-dot { color: var(--pink); }
+    .nav-word { font-family: "Anton", sans-serif; font-size: 24px; letter-spacing: 0.06em; }
+    .nav-sub {
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      opacity: 0.55; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex; gap: 28px; margin: 0 auto;
+      font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 14px;
+    }
+    .nav-links a { padding: 6px 0; position: relative; opacity: 0.78; transition: opacity 200ms; }
+    .nav-links a::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+      height: 1.5px; background: var(--pink);
+      transform: scaleX(0); transform-origin: left; transition: transform 220ms;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+    /* Mode toggle button */
+    .mode-toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 999px;
+      border: 1.5px solid var(--line);
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      cursor: pointer; background: transparent; color: var(--fg);
+      transition: all 220ms;
+    }
+    .mode-toggle:hover { border-color: var(--fg); }
+    .mode-icon { font-size: 15px; line-height: 1; }
+
+    /* Nav CTA */
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 20px; background: var(--fg); color: var(--bg);
+      border-radius: 999px;
+      font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 13px;
+      transition: background 200ms, color 200ms;
+    }
+    .nav-cta-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--pink); box-shadow: 0 0 10px var(--pink);
+      flex-shrink: 0;
+    }
+    .nav-cta:hover { background: var(--pink); color: #fff; }
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--fg); border-radius: 2px; transition: all 300ms;
+    }
+
+    /* Mobile menu overlay */
+    .mobile-menu {
+      display: none; flex-direction: column;
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--bg); padding: var(--pad);
+      padding-top: 90px; gap: 0;
+      transform: translateX(100%);
+      transition: transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1), background 400ms;
+    }
+    .mobile-menu.is-open { transform: translateX(0); display: flex; }
+    .mobile-menu a {
+      font-family: "Anton", sans-serif;
+      font-size: clamp(36px, 10vw, 72px);
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid var(--line);
+      padding: 18px 0;
+      display: block;
+      transition: color 200ms, padding-left 220ms;
+    }
+    .mobile-menu a:hover { color: var(--pink); padding-left: 16px; }
+    .mobile-menu-footer {
+      margin-top: auto; padding-top: 24px;
+      display: flex; gap: 16px; align-items: center;
+    }
+    .mobile-menu-footer button {
+      background: var(--fg); color: var(--bg);
+      border: none; border-radius: 999px;
+      padding: 10px 18px; font-family: "Space Grotesk", sans-serif;
+      font-weight: 600; font-size: 14px; cursor: pointer;
+      transition: all 200ms;
+    }
+    .mobile-menu-footer button:hover { background: var(--pink); color: #fff; }
+    .mobile-close {
+      position: absolute; top: 22px; right: var(--pad);
+      font-family: "Anton", sans-serif; font-size: 28px;
+      cursor: pointer; background: none; border: none; color: var(--fg);
+    }
+
+    @media (max-width: 900px) {
+      .nav         { justify-content: space-between; }
+      .nav-links   { display: none; }
+      .nav-cta     { display: none; }
+      .mode-toggle { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ================================================================
+       BUTTONS
+    ================================================================ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 26px; border-radius: 999px;
+      font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 15px;
+      transition: all 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer; border: none; text-decoration: none;
+    }
+    .btn-pink { background: var(--pink); color: #fff; }
+    .btn-pink:hover { background: var(--fg); color: var(--bg); transform: translateY(-2px); }
+    .btn-pink svg { transition: transform 200ms; }
+    .btn-pink:hover svg { transform: translateX(4px); }
+    .btn-outline {
+      background: transparent; color: var(--fg);
+      border: 1.5px solid rgba(244,237,224,0.3); padding: 13px 25px;
+    }
+    html[data-mode="light"] .btn-outline { border-color: rgba(13,13,13,0.25); }
+    .btn-outline:hover { border-color: var(--fg); background: rgba(244,237,224,0.06); }
+    html[data-mode="light"] .btn-outline:hover { background: rgba(13,13,13,0.06); }
+
+    /* ================================================================
+       SCROLL REVEAL
+    ================================================================ */
+    .reveal {
+      opacity: 0; transform: translateY(36px);
+      transition:
+        opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 100ms; }
+    .reveal-d2 { transition-delay: 200ms; }
+    .reveal-d3 { transition-delay: 300ms; }
+    .reveal-d4 { transition-delay: 400ms; }
+
+    /* ================================================================
+       HERO
+    ================================================================ */
+    /* ── Hero blobs ───────────────────────────────────────────── */
+    .hero-blob {
+      position: absolute; border-radius: 50%;
+      pointer-events: none; will-change: transform;
+    }
+    .hero-blob-1 {
+      width: clamp(180px,28vw,380px); height: clamp(180px,28vw,380px);
+      background: var(--pink); top: -10%; left: 12%;
+      filter: blur(80px); opacity: 0.13;
+      animation: blob-1 3s ease-in-out infinite alternate;
+    }
+    .hero-blob-2 {
+      width: clamp(260px,48vw,640px); height: clamp(260px,48vw,640px);
+      background: var(--blue); bottom: -12%; right: 4%;
+      filter: blur(85px); opacity: 0.13;
+      animation: blob-2 4s ease-in-out infinite alternate;
+    }
+    .hero-blob-3 {
+      width: clamp(140px,22vw,320px); height: clamp(140px,22vw,320px);
+      background: var(--yellow); top: 35%; right: 28%;
+      filter: blur(75px); opacity: 0.09;
+      animation: blob-3 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes blob-1 {
+      0%   { transform: translate(0,0)         scale(1);    }
+      100% { transform: translate(100px,120px) scale(1.18); }
+    }
+    @keyframes blob-2 {
+      0%   { transform: translate(0,0)           scale(1);    }
+      100% { transform: translate(-110px,-100px) scale(0.88); }
+    }
+    @keyframes blob-3 {
+      0%   { transform: translate(0,0)         scale(1);    }
+      100% { transform: translate(80px,-90px)  scale(1.25); }
+    }
+
+    /* ── Hero title line-by-line entrance ─────────────────────── */
+    @keyframes hero-line-up {
+      from { opacity:0; transform:translateY(52px); filter:blur(14px); }
+      to   { opacity:1; transform:translateY(0);    filter:blur(0);    }
+    }
+    .hl-1 { animation: hero-line-up 1.1s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+    .hl-2 { animation: hero-line-up 1.1s cubic-bezier(0.16,1,0.3,1) 0.22s both; }
+    .hl-3 { animation: hero-line-up 1.1s cubic-bezier(0.16,1,0.3,1) 0.38s both; }
+    .hl-4 { animation: hero-line-up 1.1s cubic-bezier(0.16,1,0.3,1) 0.54s both; }
+
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 28px var(--pad) 0;
+      background: var(--bg);
+      transition: background 400ms;
+    }
+    html[data-mode="light"] .hero-blob-1 { opacity: 0.22; }
+    html[data-mode="light"] .hero-blob-2 { opacity: 0.18; }
+    html[data-mode="light"] .hero-blob-3 { opacity: 0.14; }
+
+    /* ── Light mode fixes: elements that go invisible on cream bg ── */
+
+    /* Yellow elements are near-invisible on cream — swap to pink */
+    html[data-mode="light"] .port-card-cat { color: var(--pink); }
+    html[data-mode="light"] .blink-dot { background: var(--pink); }
+    html[data-mode="light"] .proc-arrow { color: var(--pink); }
+    html[data-mode="light"] .selected-title em { color: var(--pink); }
+    html[data-mode="light"] .process-title em { color: var(--pink); }
+
+    /* Yellow skill pill: dark text stays but ensure readability */
+    html[data-mode="light"] .sp-yellow { color: #0A0A0A; }
+
+    /* Yellow testimonial card: use dark text */
+    html[data-mode="light"] .tst-yellow { color: #0A0A0A; }
+
+    /* Yellow service card: dark text already, keep border visible */
+    html[data-mode="light"] .srv-yellow { border-color: rgba(13,13,13,0.18); color: #0A0A0A; }
+    html[data-mode="light"] .srv-yellow * { color: #0A0A0A; }
+
+    /* Contact card cc-dark: in light mode bg becomes cream, so text is invisible.
+       Force a proper dark background so the cream text stays readable. */
+    html[data-mode="light"] .cc-dark { background: #0D0D0D; color: #F4EDE0; }
+
+    /* Case yellow: cream text on yellow-lime gradient = invisible. Use dark ink. */
+    html[data-mode="light"] .case-yellow { color: #0A0A0A; }
+
+    /* Portfolio bg in light mode: make section-num and tab borders visible */
+    html[data-mode="light"] .tabs-bar { border-color: var(--fg); }
+    html[data-mode="light"] .tab-btn { border-color: var(--fg); }
+
+    /* Process hover in light mode: proc-arrow needs to go dark on pink bg */
+    html[data-mode="light"] .proc-item:hover .proc-arrow { color: var(--bg); }
+
+    /* Foot big border */
+    html[data-mode="light"] .foot-big { border-bottom-color: var(--fg); }
+
+    .hero-eyebrow-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 0; margin-bottom: 80px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: "JetBrains Mono", monospace; font-size: 12px;
+      letter-spacing: 0.08em; opacity: 0.85;
+    }
+    .eyebrow-right { opacity: 0.5; }
+    .dot-pulse {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--pink); box-shadow: 0 0 12px var(--pink);
+      animation: pulse 2s ease-in-out infinite;
+      display: inline-block;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 12px var(--pink); }
+      50% { opacity: 0.45; box-shadow: 0 0 4px var(--pink); }
+    }
+
+    .hero-main {
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; z-index: 1;
+      padding: 20px 0 100px;
+    }
+    .hero-copy {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .hero-title {
+      font-size: clamp(58px, 11vw, 168px);
+      line-height: 0.92; letter-spacing: -0.01em;
+      margin: 0 0 36px; text-align: center;
+    }
+    .hero-line { display: block; }
+    .hl-1 { color: var(--fg); }
+    .hl-2 { color: var(--pink); }
+    .hl-3 { color: var(--fg); }
+    .hl-4 { color: var(--fg); font-size: 0.62em; line-height: 1.05; margin-top: 0.06em; letter-spacing: 0.02em; }
+
+    .hero-blurb {
+      font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65;
+      margin: 0 auto 36px; max-width: 58ch;
+      opacity: 0.78; text-align: center;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .hero-blurb strong { font-weight: 700; opacity: 1; }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    /* Hero stats bar */
+    .hero-meta {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      margin: 0 calc(var(--pad) * -1);
+      padding: 40px var(--pad);
+      border-top: 1px solid var(--line);
+    }
+    .meta-item {
+      display: flex; flex-direction: column; gap: 8px;
+      align-items: center; justify-content: center;
+      padding: 0 20px; text-align: center;
+      border-right: 1px solid var(--line);
+    }
+    .meta-item:last-child { border-right: none; }
+    .meta-num {
+      font-family: "Anton", sans-serif; font-size: clamp(40px, 5vw, 60px);
+      line-height: 1; color: var(--fg); letter-spacing: 0.01em;
+    }
+    .meta-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; opacity: 0.52;
+    }
+
+    /* ================================================================
+       STRIP / INFO BAR
+    ================================================================ */
+    .strip {
+      background: var(--fg); color: var(--bg);
+      padding: 14px 0; overflow: hidden;
+      border-top: 2px solid var(--fg); border-bottom: 2px solid var(--fg);
+      transition: background 400ms, border-color 400ms;
+    }
+    .strip-track {
+      display: inline-flex; gap: 32px; align-items: center;
+      font-family: "Anton", sans-serif; font-size: 17px; letter-spacing: 0.08em;
+      white-space: nowrap;
+      animation: strip-scroll 22s linear infinite;
+    }
+    .strip-track > span:nth-child(odd) { color: var(--pink); }
+    @keyframes strip-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ================================================================
+       ABOUT (Section 2)
+    ================================================================ */
+    .about { padding: 88px var(--pad); border-top: 1px solid var(--line); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.45fr;
+      gap: 64px; align-items: start; margin-top: 8px;
+    }
+    .about-portrait-col { width: 100%; }
+    .portrait-wrapper {
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden; border-radius: 6px;
+      transform: rotate(-2.5deg);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,255,61,0.12);
+      filter: drop-shadow(0 20px 48px rgba(245,255,61,0.22));
+      transition: filter 400ms;
+    }
+    .portrait-wrapper img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      object-position: center top;
+    }
+    html[data-mode="light"] .portrait-wrapper {
+      filter: drop-shadow(0 20px 48px rgba(255,61,139,0.2));
+    }
+    .portrait-tag {
+      margin-top: 20px; padding: 8px 18px;
+      background: var(--fg); color: var(--bg);
+      font-family: "Anton", sans-serif; font-size: 14px; letter-spacing: 0.18em;
+      display: inline-block; transform: rotate(2deg);
+      transition: background 400ms, color 400ms;
+    }
+    .about-title {
+      font-size: clamp(52px, 8vw, 140px); line-height: 0.9;
+      margin-bottom: 28px;
+    }
+    .stroke-text {
+      -webkit-text-stroke: 2px var(--fg); color: transparent;
+      transition: -webkit-text-stroke-color 400ms;
+    }
+    .pink-text { color: var(--pink); }
+    .about-body-text {
+      font-size: clamp(16px, 1.5vw, 18px); line-height: 1.6;
+      max-width: 56ch; margin: 0 0 36px; opacity: 0.88;
+    }
+    .skill-scroll-wrap { margin-top: 8px; }
+    .skill-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    /* hide duplicates on desktop */
+    .skill-dupe { display: none; }
+
+    .skill-pill {
+      padding: 20px 10px; border-radius: 4px;
+      text-align: center; display: flex; flex-direction: column; gap: 4px;
+    }
+    .skill-pill span { font-family: "Anton", sans-serif; font-size: 19px; letter-spacing: 0.05em; }
+    .skill-pill small { font-family: "Space Grotesk", sans-serif; font-size: 11px; opacity: 0.85; text-transform: lowercase; }
+    .sp-pink   { background: var(--pink); color: var(--bg); }
+    .sp-blue   { background: var(--blue); color: #fff; }
+    .sp-yellow { background: var(--yellow); color: var(--bg); }
+    .sp-fg     { background: var(--fg); color: var(--bg); }
+
+    @keyframes skill-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ================================================================
+       FLYER PLACEHOLDER TILES
+       (Replace with Sanity <img> tags when images are added)
+    ================================================================ */
+    .flyer-tile {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 14px; font-family: "Anton", sans-serif;
+      border-radius: 4px; position: relative; overflow: hidden;
+    }
+    .flyer-tile > * { position: relative; z-index: 2; }
+    .ft-noise {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0.18;
+      background-image:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 30%),
+        radial-gradient(circle at 70% 80%, rgba(0,0,0,0.4), transparent 30%);
+      mix-blend-mode: overlay;
+    }
+    .ft-head, .ft-foot {
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .ft-body { display: flex; flex-direction: column; gap: 4px; padding: 4px 0; }
+    .ft-label { font-size: clamp(18px, 3vw, 40px); line-height: 0.9; text-transform: uppercase; }
+    .ft-sub { font-family: "Space Grotesk", sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85; }
+    .ft-pill { padding: 2px 8px; border: 1px solid currentColor; border-radius: 999px; }
+    /* Color variants */
+    .ft-pink  { background: linear-gradient(135deg, #FF3D8B 0%, #ff1f6f 70%, #2742FF 100%); color: #F4EDE0; }
+    .ft-pink  .ft-label { color: #F5FF3D; }
+    .ft-blue  { background: linear-gradient(150deg, #2742FF 0%, #1428cc 60%, #FF3D8B 100%); color: #F4EDE0; }
+    .ft-blue  .ft-label { color: #F5FF3D; }
+    .ft-yel   { background: linear-gradient(135deg, #F5FF3D 0%, #d8e22b 70%, #FF3D8B 100%); color: #0A0A0A; }
+    .ft-yel   .ft-label { color: #2742FF; }
+    .ft-blk   { background: radial-gradient(circle at 30% 30%, #FF3D8B 0%, transparent 40%), radial-gradient(circle at 70% 70%, #2742FF 0%, transparent 50%), #0A0A0A; color: #F4EDE0; }
+    .ft-blk   .ft-label { color: #F5FF3D; }
+    .ft-wht   { background: #F4EDE0; color: #0A0A0A; }
+    .ft-wht   .ft-label { color: #FF3D8B; }
+
+    /* ================================================================
+       PORTFOLIO — CMS-DRIVEN (Section 3)
+
+       SANITY CMS SCHEMA: portfolioItem
+       ─────────────────────────────────
+       title:         string        (project title)
+       category:      string        (e.g. "Club Flyer", "Restaurant Menu")
+       type:          'print' | 'flyers'  ← controls which tab it appears under
+       description:   text          (short description shown on card)
+       mainImage:     image         (replaces the flyer tile placeholder)
+       galleryImages: array<image>  (optional additional images)
+       year:          string
+       client:        string        (optional)
+       projectLink:   url           (optional external link)
+       featured:      boolean
+       order:         number        (controls sort order within tab)
+
+       HOW TABS WORK:
+       - "Party Flyers" tab → shows items where type = "flyers"
+       - "Print Designs" tab → shows items where type = "print"
+       - Adding a new Sanity doc with the right type auto-routes it to the correct tab.
+    ================================================================ */
+    .portfolio {
+      padding: 88px var(--pad); border-top: 1px solid var(--line);
+      background: var(--bg-2); transition: background 400ms;
+    }
+    .port-head { margin-bottom: 36px; }
+    .port-title { font-size: clamp(56px, 10vw, 180px); line-height: 0.9; }
+    .port-title em { color: var(--pink); }
+    .port-sub { font-size: 15px; opacity: 0.65; margin: 10px 0 0; }
+
+    /* Tabs bar */
+    .tabs-bar {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      border-top: 1.5px solid var(--fg); border-bottom: 1.5px solid var(--fg);
+      padding: 16px 0; margin-bottom: 44px;
+      transition: border-color 400ms;
+    }
+    .tabs { display: flex; gap: 8px; }
+    .tab-btn {
+      font-family: "Anton", sans-serif; font-size: 16px; letter-spacing: 0.08em;
+      background: transparent; border: 1.5px solid var(--fg); color: var(--fg);
+      padding: 12px 22px; border-radius: 999px;
+      cursor: pointer; transition: all 220ms;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .tab-num { font-family: "JetBrains Mono", monospace; font-size: 11px; opacity: 0.65; }
+    .tab-count { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--pink); }
+    .tab-btn:hover { background: var(--fg); color: var(--bg); }
+    .tab-btn.is-active { background: var(--pink); color: var(--bg); border-color: var(--pink); }
+    .tab-btn.is-active .tab-count { color: var(--bg); }
+    .tabs-status {
+      margin-left: auto;
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.65;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .blink-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--yellow); animation: blink 1.4s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+    /* Portfolio grid */
+    .port-panel { display: none; }
+    .port-panel.is-active { display: block; }
+    .port-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 28px 20px;
+    }
+
+    /* ── Lightbox ──────────────────────────────────────────────── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 9900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 320ms cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .lightbox.is-open { opacity: 1; pointer-events: all; }
+    .lb-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(4,4,4,0.93);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    }
+    .lb-stage {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 20px; width: 100%; padding: 0 88px;
+      box-sizing: border-box;
+    }
+    .lb-img {
+      display: block;
+      max-width: min(580px, 78vw); max-height: 78vh;
+      width: auto; height: auto;
+      object-fit: contain; border-radius: 6px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.75);
+      transform: scale(0.93);
+      transition: transform 340ms cubic-bezier(0.2,0.8,0.2,1), opacity 180ms;
+    }
+    .lightbox.is-open .lb-img { transform: scale(1); }
+    .lb-img.lb-switching { opacity: 0; transform: scale(0.95); }
+    .lb-caption {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      width: 100%; max-width: min(580px, 78vw); color: #F4EDE0;
+    }
+    .lb-caption-left { display: flex; flex-direction: column; gap: 4px; }
+    .lb-title {
+      font-family: "Space Grotesk", sans-serif; font-weight: 600;
+      font-size: 15px; letter-spacing: 0.01em;
+    }
+    .lb-cat {
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.5;
+    }
+    .lb-counter {
+      font-family: "JetBrains Mono", monospace; font-size: 12px;
+      letter-spacing: 0.18em; opacity: 0.45; white-space: nowrap;
+      padding-top: 2px;
+    }
+    .lb-close {
+      position: fixed; top: 24px; right: 28px; z-index: 2;
+      width: 46px; height: 46px; border-radius: 50%;
+      border: 1.5px solid rgba(244,237,224,0.25);
+      background: rgba(244,237,224,0.07);
+      color: #F4EDE0; font-size: 20px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 200ms;
+    }
+    .lb-close:hover { background: rgba(255,61,139,0.8); border-color: transparent; }
+    .lb-prev, .lb-next {
+      position: fixed; top: 50%; transform: translateY(-50%); z-index: 2;
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 1.5px solid rgba(244,237,224,0.22);
+      background: rgba(244,237,224,0.06);
+      color: #F4EDE0; font-size: 22px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 220ms;
+    }
+    .lb-prev { left: 20px; }
+    .lb-next { right: 20px; }
+    .lb-prev:hover, .lb-next:hover { background: var(--pink); border-color: var(--pink); }
+    .lb-prev:disabled, .lb-next:disabled { opacity: 0.2; cursor: default; }
+    @media (max-width: 600px) {
+      .lb-stage { padding: 0 16px; }
+      .lb-img { max-width: 92vw; max-height: 70vh; }
+      .lb-caption { max-width: 92vw; }
+      .lb-prev { left: 8px; } .lb-next { right: 8px; }
+    }
+
+    /* ── Multi-image card (grouped variants) ──────────────────── */
+    .port-card--multi .port-card-visual { position: relative; }
+    .multi-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      opacity: 0; transition: opacity 340ms;
+    }
+    .multi-img.is-active { opacity: 1; }
+    .multi-dots {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 7px; z-index: 5;
+      padding: 5px 10px; border-radius: 999px;
+      background: rgba(0,0,0,0.42); backdrop-filter: blur(6px);
+    }
+    .multi-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      border: none; padding: 0; cursor: pointer;
+      background: rgba(255,255,255,0.4);
+      transition: all 220ms;
+    }
+    .multi-dot.is-active { background: #fff; transform: scale(1.3); }
+    .multi-badge {
+      position: absolute; top: 10px; right: 10px; z-index: 5;
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(0,0,0,0.55); color: #fff;
+      padding: 3px 8px; border-radius: 999px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Hidden extra cards — revealed on "See More" (higher specificity beats .port-card { display:block }) */
+    .port-card.port-extra { display: none; }
+    .port-panel.show-all .port-card.port-extra { display: block; }
+
+    /* See More — top pill (in tabs-status bar) */
+    .see-more-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 16px; border-radius: 999px;
+      border: 1.5px solid var(--pink);
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: transparent; color: var(--pink);
+      cursor: pointer; transition: all 220ms; flex-shrink: 0;
+    }
+    .see-more-btn:hover { background: var(--pink); color: #fff; }
+    .see-more-btn .sm-arrow { transition: transform 280ms; display: inline-block; }
+    .see-more-btn.is-open .sm-arrow { transform: rotate(180deg); }
+    .see-more-btn .sm-count { opacity: 0.8; }
+
+    /* See More — bottom bar inside each panel */
+    .see-more-bar {
+      margin-top: 48px; padding-top: 28px;
+      border-top: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+    .see-more-bar-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 28px; border-radius: 6px;
+      border: 1.5px solid var(--fg);
+      font-family: "Space Grotesk", sans-serif; font-weight: 600;
+      font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+      background: transparent; color: var(--fg);
+      cursor: pointer; transition: all 220ms cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .see-more-bar-btn:hover { background: var(--pink); border-color: var(--pink); color: #fff; }
+    .see-more-bar-btn .sb-arrow { transition: transform 280ms; display: inline-block; font-size: 16px; }
+    .see-more-bar-btn.is-open .sb-arrow { transform: rotate(180deg); }
+    .see-more-bar-count {
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--pink); opacity: 0.8;
+    }
+
+    /* Portfolio card */
+    .port-card {
+      display: block; color: inherit;
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .port-card:hover { transform: rotate(0deg) translateY(-7px); }
+    .port-card-visual {
+      position: relative; aspect-ratio: 3/4;
+      overflow: hidden; border-radius: 4px;
+    }
+    .port-card-visual img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .port-card-veil {
+      position: absolute; inset: 0;
+      background: rgba(10,10,10,0.88);
+      color: var(--yellow);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      font-family: "Anton", sans-serif; font-size: 22px; letter-spacing: 0.1em;
+      opacity: 0; transition: opacity 240ms;
+    }
+    .port-card:hover .port-card-veil { opacity: 1; }
+    .veil-arrow { font-size: 30px; }
+    .port-card-info { padding-top: 14px; }
+    .port-card-num {
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      color: var(--pink); letter-spacing: 0.18em;
+    }
+    .port-card-info h3 { font-size: 21px; margin: 5px 0 4px; }
+    .port-card-info p { font-size: 13px; opacity: 0.65; margin: 0; font-family: "Space Grotesk", sans-serif; text-transform: none; font-weight: 400; }
+    .port-card-cat {
+      display: inline-block; margin-top: 8px;
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--yellow);
+    }
+
+    /* ================================================================
+       SERVICES (Section 4)
+    ================================================================ */
+    .services { padding: 88px var(--pad); border-top: 1px solid var(--line); }
+    .srv-title { font-size: clamp(56px, 10vw, 180px); line-height: 0.9; margin-bottom: 36px; }
+    .srv-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      border: 1.5px solid var(--fg); transition: border-color 400ms;
+    }
+    .srv-card {
+      padding: 24px; min-height: 220px;
+      display: flex; flex-direction: column;
+      border-right: 1.5px solid var(--fg); border-bottom: 1.5px solid var(--fg);
+      transition: transform 220ms, box-shadow 220ms, border-color 400ms;
+    }
+    .srv-card:nth-child(5n)   { border-right: none; }
+    .srv-card:nth-last-child(-n+5) { border-bottom: none; }
+    .srv-card:hover { transform: scale(1.03); z-index: 2; box-shadow: 0 18px 44px rgba(0,0,0,0.45); }
+    .srv-pink   { background: var(--pink); color: var(--bg); }
+    .srv-blue   { background: var(--blue); color: #fff; }
+    .srv-yellow { background: var(--yellow); color: #0A0A0A; }
+    .srv-yellow * { color: #0A0A0A; }
+    .srv-cream  { background: var(--fg); color: var(--bg); }
+    .srv-card-top {
+      display: flex; justify-content: space-between;
+      font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.2em;
+    }
+    .srv-card h3 { font-size: 25px; line-height: 1.05; margin: 28px 0 8px; }
+    .srv-card p {
+      font-size: 13px; line-height: 1.45; margin: 0 0 auto;
+      font-family: "Space Grotesk", sans-serif; text-transform: none; font-weight: 400;
+    }
+    .srv-card-bot {
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.2em; padding-top: 14px;
+    }
+
+    /* ================================================================
+       SELECTED JOBS — CMS-DRIVEN (Section 5)
+
+       SANITY CMS SCHEMA: selectedJob
+       ──────────────────────────────
+       jobTitle:         string
+       jobCategory:      string        (e.g. "Event Flyer · Lagos")
+       description:      text
+       goal:             text
+       outcome:          text
+       mainImage:        image         (replaces flyer tile placeholder)
+       additionalImages: array<image>
+       year:             string
+       client:           string
+       ctaText:          string        (button label, e.g. "Read Full Case")
+       ctaLink:          url
+       featured:         boolean
+       order:            number
+    ================================================================ */
+    .selected { padding: 88px var(--pad); border-top: 1px solid var(--line); }
+    .selected-title { font-size: clamp(56px, 10vw, 180px); line-height: 0.9; margin-bottom: 36px; }
+    .selected-title em { color: var(--yellow); }
+    .cases-list { display: flex; flex-direction: column; gap: 24px; }
+
+    .case-item {
+      display: grid; grid-template-columns: 0.8fr 1.2fr;
+      gap: 36px; padding: 36px; border-radius: 8px;
+    }
+    .case-pink   { background: linear-gradient(135deg, #c4205e 0%, #7a0f35 100%); color: #F4EDE0; }
+    .case-blue   { background: linear-gradient(135deg, #1830cc 0%, #0d1a6e 100%); color: #F4EDE0; }
+    .case-yellow { background: linear-gradient(135deg, #F5FF3D 0%, #c8cc00 100%); color: #0A0A0A; }
+    .case-item:nth-child(even) > .case-poster { order: 2; }
+    .case-poster {
+      aspect-ratio: 3/4; transform: rotate(-2deg); align-self: start;
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .case-poster img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .case-info { display: flex; flex-direction: column; align-self: center; }
+    .case-n {
+      font-family: "JetBrains Mono", monospace; font-size: 12px;
+      letter-spacing: 0.22em; opacity: 0.7; margin-bottom: 4px; display: block;
+    }
+    .case-info h3 { font-size: clamp(44px, 6vw, 96px); line-height: 0.9; margin: 0 0 8px; }
+    .case-type {
+      font-family: "Anton", sans-serif; font-size: 16px; letter-spacing: 0.1em;
+      margin: 0 0 26px; opacity: 0.82; display: block;
+    }
+    .case-row {
+      display: grid; grid-template-columns: 96px 1fr;
+      gap: 18px; padding: 14px 0; border-top: 1px solid currentColor;
+    }
+    .case-row:last-of-type { border-bottom: 1px solid currentColor; }
+    .case-row > strong {
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.2em; text-transform: uppercase; padding-top: 4px; display: block;
+      font-weight: 500;
+    }
+    .case-row > p {
+      margin: 0; font-size: 15px; line-height: 1.55;
+      font-family: "Space Grotesk", sans-serif; text-transform: none; font-weight: 400;
+    }
+    .case-link {
+      font-family: "Anton", sans-serif; font-size: 18px; letter-spacing: 0.12em;
+      padding-top: 22px; display: inline-block; transition: opacity 200ms;
+    }
+    .case-link:hover { opacity: 0.65; }
+
+    /* ================================================================
+       PROCESS (Section 6)
+    ================================================================ */
+    .process {
+      padding: 88px var(--pad); border-top: 1px solid var(--line);
+      background: var(--bg-2); transition: background 400ms;
+    }
+    .process-title { font-size: clamp(56px, 10vw, 180px); line-height: 0.9; margin-bottom: 36px; }
+    .process-title em { color: var(--blue); }
+    .process-list { border-top: 1.5px solid var(--fg); transition: border-color 400ms; }
+    .proc-item {
+      display: grid; grid-template-columns: 84px 1fr 64px;
+      gap: 24px; align-items: center;
+      padding: 24px 0; border-bottom: 1.5px solid var(--fg);
+      transition: transform 220ms, background 220ms, border-color 400ms;
+    }
+    .proc-item:hover { transform: translateX(12px); background: var(--pink); color: var(--bg); }
+    .proc-num-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--pink); color: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Anton", sans-serif; font-size: 32px;
+      transition: background 220ms, color 220ms; flex-shrink: 0;
+    }
+    .proc-item:hover .proc-num-circle { background: var(--bg); color: var(--pink); }
+    .proc-body h4 { font-size: 34px; line-height: 1; margin: 0 0 5px; }
+    .proc-body p {
+      font-size: 15px; opacity: 0.8; margin: 0;
+      font-family: "Space Grotesk", sans-serif; text-transform: none; font-weight: 400;
+    }
+    .proc-arrow {
+      font-family: "Anton", sans-serif; font-size: 36px;
+      text-align: right; color: var(--yellow); transition: color 220ms;
+    }
+    .proc-item:hover .proc-arrow { color: var(--bg); }
+
+    /* ================================================================
+       TESTIMONIALS — CMS-DRIVEN (Section 7)
+
+       SANITY CMS SCHEMA: testimonial
+       ────────────────────────────────
+       clientName:    string
+       clientRole:    string        (e.g. "Promoter")
+       clientCompany: string        (e.g. "Neon Nights")
+       testimonialText: text
+       clientImage:   image         (optional portrait/headshot)
+       clientLogo:    image         (optional company logo)
+       rating:        number        (1–5, optional)
+       order:         number        (controls display order)
+    ================================================================ */
+    .testimonials { padding: 88px var(--pad); border-top: 1px solid var(--line); }
+    .tst-title { font-size: clamp(56px, 10vw, 180px); line-height: 0.9; margin-bottom: 44px; }
+    .tst-title em { color: var(--pink); }
+    .tst-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+    .tst-card {
+      padding: 28px; border-radius: 8px;
+      transform: rotate(var(--rot, 0deg));
+      display: flex; flex-direction: column; gap: 16px;
+      transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .tst-card:hover { transform: rotate(0deg) scale(1.02); }
+    .tst-pink   { background: var(--pink); color: var(--bg); }
+    .tst-blue   { background: var(--blue); color: #F4EDE0; }
+    .tst-yellow { background: var(--yellow); color: var(--bg); }
+    .tst-mark {
+      font-family: "Instrument Serif", serif; font-size: 96px;
+      line-height: 0.5; margin-bottom: 8px; display: block;
+    }
+    .tst-quote {
+      font-family: "Anton", sans-serif; font-size: 22px; line-height: 1.18;
+      letter-spacing: 0.01em; text-transform: none; margin: 0; flex: 1; font-weight: 400;
+    }
+    .tst-footer {
+      display: flex; flex-direction: column; gap: 3px;
+      padding-top: 14px; border-top: 1.5px solid currentColor;
+      font-family: "JetBrains Mono", monospace; font-size: 12px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .tst-footer strong { font-size: 14px; font-weight: 700; }
+
+    /* ================================================================
+       CONTACT (Section 8)
+    ================================================================ */
+    .contact {
+      border-top: 1px solid var(--line);
+      background: var(--pink); color: var(--bg);
+    }
+    .contact-marquee {
+      background: var(--bg); color: var(--pink);
+      border-bottom: 2px solid var(--bg);
+      padding: 14px 0; overflow: hidden;
+      transition: background 400ms, border-color 400ms;
+    }
+    .contact-mq-track {
+      display: inline-flex; white-space: nowrap;
+      animation: mq-scroll 24s linear infinite;
+      font-family: "Anton", sans-serif; font-size: 28px; letter-spacing: 0.1em;
+    }
+    .contact-mq-track > span { padding-right: 16px; display: inline-flex; gap: 16px; align-items: center; }
+    .contact-mq-track i { color: var(--yellow); font-style: normal; }
+    .contact-inner { padding: 88px var(--pad); }
+    .contact .section-num { color: var(--bg); opacity: 0.7; }
+    .contact-title { font-size: clamp(48px, 8vw, 152px); line-height: 0.9; margin-bottom: 18px; }
+    .contact-title em { color: #F4EDE0; }
+    .contact-title .c-blue { color: var(--blue); }
+    .contact-sub {
+      font-size: clamp(16px, 1.5vw, 19px); max-width: 52ch;
+      line-height: 1.55; margin: 0 0 44px;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .contact-card {
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 34px; border-radius: 8px;
+      transition: transform 220ms, box-shadow 220ms;
+    }
+    .contact-card:hover { transform: translate(-5px, -5px); box-shadow: 8px 8px 0 var(--bg); }
+    .contact-card span {
+      font-family: "JetBrains Mono", monospace; font-size: 12px;
+      letter-spacing: 0.2em; opacity: 0.7; text-transform: uppercase;
+    }
+    .contact-card strong {
+      font-family: "Anton", sans-serif; font-size: clamp(22px, 3.5vw, 50px);
+      font-weight: 400; letter-spacing: 0.04em; line-height: 1;
+    }
+    .cc-dark   { background: var(--bg); color: #F4EDE0; }
+    .cc-blue   { background: var(--blue); color: #F4EDE0; }
+    .cc-paper  { background: #F4EDE0; color: #0A0A0A; }
+    .cc-yellow { background: var(--yellow); color: #0A0A0A; }
+
+    /* ================================================================
+       FOOTER
+    ================================================================ */
+    .footer {
+      background: var(--bg); color: var(--fg);
+      padding: 44px var(--pad);
+      border-top: 2px solid var(--fg); transition: background 400ms, color 400ms, border-color 400ms;
+    }
+    .foot-big {
+      font-family: "Anton", sans-serif;
+      font-size: clamp(72px, 16vw, 280px);
+      line-height: 0.85; letter-spacing: 0.02em;
+      padding: 20px 0 28px;
+      display: flex; align-items: center; gap: 0.05em;
+    }
+    .foot-dot { color: var(--pink); }
+    .foot-copy {
+      padding: 20px 0 4px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5;
+      border-top: 1px solid var(--line);
+      transition: border-color 400ms;
+    }
+
+    /* ================================================================
+       RESPONSIVE
+    ================================================================ */
+
+    /* ── Tablet landscape (≤1100px) ─────────────────────────────── */
+    @media (max-width: 1100px) {
+      .port-grid { grid-template-columns: repeat(3, 1fr); }
+      .srv-grid  { grid-template-columns: repeat(3, 1fr); }
+      .srv-card:nth-child(5n)        { border-right: 1.5px solid var(--fg); }
+      .srv-card:nth-child(3n)        { border-right: none; }
+      .srv-card:nth-last-child(-n+5) { border-bottom: 1.5px solid var(--fg); }
+      .srv-card:nth-last-child(-n+3) { border-bottom: none; }
+    }
+
+    /* ── Tablet portrait / large phone (≤900px) ─────────────────── */
+    @media (max-width: 900px) {
+      /* Hero */
+      .hero-eyebrow-row { margin-bottom: 48px; }
+      .hero-main        { padding-bottom: 64px; }
+
+      /* About — portrait stacked above text, full image visible */
+      .about-grid       { grid-template-columns: 1fr; gap: 32px; }
+      .portrait-wrapper {
+        width: 95vw;
+        margin-left: 0;
+        aspect-ratio: unset;
+        height: auto;
+        overflow: hidden;
+        transform: none;
+        filter: none;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .portrait-wrapper img {
+        width: 100%;
+        height: auto;
+        object-fit: unset;
+        display: block;
+      }
+
+      /* Skills — switch to scrolling ticker */
+      .skill-scroll-wrap { overflow: hidden; }
+      .skill-grid {
+        display: flex; gap: 10px;
+        width: max-content;
+        animation: skill-scroll 10s linear infinite;
+      }
+      .skill-dupe { display: flex; }
+      .skill-pill { min-width: 120px; padding: 18px 12px; flex-shrink: 0; }
+
+      /* Portfolio */
+      .port-grid  { grid-template-columns: repeat(2, 1fr); }
+
+      /* Services → 2 col */
+      .srv-grid   { grid-template-columns: 1fr 1fr; }
+      .srv-card   { border-right: 1.5px solid var(--fg) !important; }
+      .srv-card:nth-child(2n)        { border-right: none !important; }
+      .srv-card:nth-last-child(-n+2) { border-bottom: none; }
+
+      /* Process — tighten columns */
+      .proc-item        { grid-template-columns: 60px 1fr 40px; gap: 16px; }
+      .proc-num-circle  { width: 50px; height: 50px; font-size: 24px; }
+      .proc-body h4     { font-size: 26px; }
+      .proc-arrow       { font-size: 26px; }
+
+      /* Selected Jobs — stack vertically */
+      .case-item                            { grid-template-columns: 1fr; gap: 24px; padding: 28px; }
+      .case-item:nth-child(even) > .case-poster { order: 0; }
+      .case-poster                          { max-width: 280px; margin: 0 auto; }
+
+      /* Testimonials → 1 col, remove rotations */
+      .tst-grid { grid-template-columns: 1fr; }
+      .tst-card { --rot: 0deg !important; }
+
+      /* Contact → 1 col */
+      .contact-grid { grid-template-columns: 1fr; }
+
+      /* ── Header line-heights — open up at tablet/mobile ───────── */
+      .hero-title       { line-height: 1.0; }
+      .about-title      { line-height: 1.0; }
+      .port-title       { line-height: 1.0; }
+      .srv-title        { line-height: 1.0; }
+      .selected-title   { line-height: 1.0; }
+      .case-info h3     { line-height: 1.0; }
+      .process-title    { line-height: 1.0; }
+      .tst-title        { line-height: 1.0; }
+      .contact-title    { line-height: 1.0; }
+      .proc-body h4     { line-height: 1.15; }
+    }
+
+    /* ── Phone (≤600px) ─────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      /* About */
+      .about-title  { font-size: clamp(36px, 10vw, 52px); }
+      .about-body-text { font-size: 14px; margin-bottom: 20px; }
+
+      /* Status bar: flush left when it wraps */
+      .tabs-status { margin-left: 0; width: 100%; }
+      /* Kill card tilt on mobile — prevents clipping in tight grids */
+      .port-card  { --rot: 0deg; }
+      .port-card:hover { transform: translateY(-4px); }
+      /* Hero stats bar → stack */
+      .hero-meta  { grid-template-columns: 1fr; }
+      .meta-item  { border-right: none; border-bottom: 1px solid var(--line); padding: 20px; }
+      .meta-item:last-child { border-bottom: none; }
+
+      /* Strip — smaller text on phone */
+      .strip-track { font-size: 14px; gap: 22px; }
+
+      /* Skills — ticker already active from 900px block */
+
+      /* Portfolio → 2 col on phones (images are portrait, fits nicely) */
+      .port-grid  { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+      /* Tabs bar — allow wrapping */
+      .tabs-bar   { flex-wrap: wrap; gap: 10px; }
+      .tabs       { flex-wrap: wrap; }
+
+      /* Services → 1 col on phone */
+      .srv-grid   { grid-template-columns: 1fr !important; }
+      .srv-card   { border-right: none !important; }
+      .srv-card:nth-last-child(1) { border-bottom: none; }
+
+      /* Process — drop the arrow column */
+      .proc-item        { grid-template-columns: 48px 1fr; gap: 14px; }
+      .proc-arrow       { display: none; }
+      .proc-num-circle  { width: 44px; height: 44px; font-size: 20px; }
+      .proc-body h4     { font-size: 20px; }
+      .proc-body p      { font-size: 13px; }
+      .proc-item:hover  { transform: none; }
+
+      /* Selected jobs — reduce padding */
+      .case-item  { padding: 20px; gap: 20px; }
+      .case-row   { grid-template-columns: 80px 1fr; gap: 12px; }
+
+      /* Footer copy — stack */
+      .foot-copy  { flex-direction: column; gap: 10px; text-align: center; }
+
+      /* Contact cards — reduce padding, disable shift hover */
+      .contact-card { padding: 22px; }
+      .contact-card:hover { transform: none; box-shadow: none; }
+    }
+
+    /* ── Small phone (≤400px) ──────────────────────────────────── */
+    @media (max-width: 400px) {
+      /* Portfolio → 1 col */
+      .port-grid  { grid-template-columns: 1fr; gap: 12px; }
+
+      /* Tab buttons — tighter */
+      .tab-btn    { padding: 10px 14px; font-size: 11px; }
+
+      /* Footer wordmark */
+      .foot-big   { font-size: clamp(52px, 17vw, 280px); }
+    }
+
+    /* ── iPhone / standard phone (≤375px) ──────────────────────── */
+    @media (max-width: 375px) {
+      /* Section padding — breathe on narrow screen */
+      .about, .portfolio, .services,
+      .selected, .process, .testimonials { padding-left: 16px; padding-right: 16px; }
+      .contact-inner { padding-left: 16px; padding-right: 16px; }
+      .footer        { padding-left: 16px; padding-right: 16px; }
+
+      /* Hero title — more breathing room */
+      .hero-title     { line-height: 1.05; letter-spacing: -0.005em; }
+      .hero-blurb     { font-size: 15px; }
+      .hero-cta       { flex-direction: column; align-items: center; }
+      .hero-cta .btn  { width: 100%; justify-content: center; }
+
+      /* About */
+      .about-title    { line-height: 1.05; }
+      .portrait-wrapper { width: 80vw; }
+
+      /* Skills → 2 col but smaller pills */
+      .skill-pill     { min-width: 100px; padding: 14px 10px; }
+      .skill-pill span { font-size: 15px; }
+
+      /* Tab buttons → fit all 3 on one row */
+      .tab-btn        { padding: 9px 12px; font-size: 12px; gap: 6px; }
+      .tab-num        { display: none; }
+
+      /* Portfolio grid stays 1 col */
+      .port-grid      { grid-template-columns: 1fr; }
+
+      /* Services */
+      .srv-card       { padding: 18px; min-height: 180px; }
+      .srv-card h3    { font-size: 20px; }
+
+      /* Process */
+      .proc-item      { grid-template-columns: 40px 1fr; gap: 12px; padding: 18px 0; }
+      .proc-num-circle { width: 38px; height: 38px; font-size: 18px; }
+      .proc-body h4   { font-size: 18px; line-height: 1.15; }
+      .proc-body p    { font-size: 12px; }
+
+      /* Selected jobs */
+      .case-item      { padding: 16px; }
+      .case-info h3   { font-size: clamp(32px, 10vw, 60px); line-height: 1.05; }
+      .case-row       { grid-template-columns: 64px 1fr; gap: 10px; font-size: 13px; }
+
+      /* Testimonials */
+      .tst-quote      { font-size: 18px; }
+
+      /* Contact */
+      .contact-title  { line-height: 1.05; }
+      .contact-card   { padding: 18px; }
+      .contact-card strong { font-size: clamp(18px, 6vw, 36px); }
+
+      /* Footer */
+      .foot-big       { font-size: clamp(44px, 16vw, 280px); }
+      .foot-copy      { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       PRELOADER
+  ============================================================ -->
+  <div id="preloader">
+    <div class="pl-brand">HBEE<span>●</span>DESIGNS</div>
+    <div class="pl-counter">
+      <span class="pl-num" id="plNum">0</span>
+      <span class="pl-pct">%</span>
+    </div>
+    <div class="pl-bar-wrap">
+      <div class="pl-bar-fill" id="plBar"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MARQUEE TICKER
+  ============================================================ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>PRINT <i>✦</i> FLYERS <i>✦</i> EVENTS <i>✦</i> POSTERS <i>✦</i> BRAND VISUALS <i>✦</i> NIGHTLIFE <i>✦</i></span>
+      <span>PRINT <i>✦</i> FLYERS <i>✦</i> EVENTS <i>✦</i> POSTERS <i>✦</i> BRAND VISUALS <i>✦</i> NIGHTLIFE <i>✦</i></span>
+      <span>PRINT <i>✦</i> FLYERS <i>✦</i> EVENTS <i>✦</i> POSTERS <i>✦</i> BRAND VISUALS <i>✦</i> NIGHTLIFE <i>✦</i></span>
+      <span>PRINT <i>✦</i> FLYERS <i>✦</i> EVENTS <i>✦</i> POSTERS <i>✦</i> BRAND VISUALS <i>✦</i> NIGHTLIFE <i>✦</i></span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo" aria-label="HBEE Designs — Home">
+      <span class="nav-dot">●</span>
+      <span class="nav-word">HBEE</span>
+      <span class="nav-sub">designs</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <button class="mode-toggle" id="modeToggle" aria-label="Toggle colour mode">
+        <span class="mode-icon" id="modeIcon">☀</span>
+        <span id="modeLabel">Light</span>
+      </button>
+      <a href="#contact" class="nav-cta">
+        <span class="nav-cta-dot"></span>
+        Book a design
+      </a>
+    </div>
+
+    <button class="nav-hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <a href="#about"    class="mob-link">About</a>
+    <a href="#work"     class="mob-link">Work</a>
+    <a href="#services" class="mob-link">Services</a>
+    <a href="#process"  class="mob-link">Process</a>
+    <a href="#contact"  class="mob-link">Contact</a>
+    <div class="mobile-menu-footer">
+      <button id="mobileModeToggle">Toggle mode</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 1: HERO
+  ============================================================ -->
+  <header class="hero" id="hero">
+    <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-3" aria-hidden="true"></div>
+    <div class="hero-eyebrow-row">
+      <div class="eyebrow">
+        <span class="dot-pulse"></span>
+        Available for new commissions — Q2 booking open
+      </div>
+      <div class="eyebrow eyebrow-right">Lagos, NG · Worldwide</div>
+    </div>
+
+    <div class="hero-main">
+      <div class="hero-copy">
+        <h1 class="hero-title">
+          <span class="hero-line hl-1">Bold</span>
+          <span class="hero-line hl-2"><em>graphic</em></span>
+          <span class="hero-line hl-3">design</span>
+          <span class="hero-line hl-4">that owns the wall.</span>
+        </h1>
+        <p class="hero-blurb reveal reveal-d1">
+          HBEE Designs is the studio of <strong>Habeeb</strong> — print, party flyers,
+          promotional materials and brand visuals for clients who want to stop the scroll
+          and turn heads in real life.
+        </p>
+        <div class="hero-cta reveal reveal-d2">
+          <a class="btn btn-pink" href="#work">
+            View portfolio
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/>
+            </svg>
+          </a>
+          <a class="btn btn-outline" href="#contact">Book a design</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <div class="meta-item reveal">
+        <span class="meta-num">180+</span>
+        <span class="meta-label">Designs delivered</span>
+      </div>
+      <div class="meta-item reveal reveal-d1">
+        <span class="meta-num">40+</span>
+        <span class="meta-label">Happy clients</span>
+      </div>
+      <div class="meta-item reveal reveal-d2">
+        <span class="meta-num">6 yrs</span>
+        <span class="meta-label">Studio practice</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       INFO STRIP
+  ============================================================ -->
+  <div class="strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>★</span><span>180+ DESIGNS DELIVERED</span>
+      <span>★</span><span>40+ HAPPY CLIENTS</span>
+      <span>★</span><span>RESIDENT DESIGNER · 6 VENUES</span>
+      <span>★</span><span>PRINT-READY · 24H TURNAROUND</span>
+      <span>★</span><span>EST. 2019 — LAGOS</span>
+      <span>★</span><span>180+ DESIGNS DELIVERED</span>
+      <span>★</span><span>40+ HAPPY CLIENTS</span>
+      <span>★</span><span>RESIDENT DESIGNER · 6 VENUES</span>
+      <span>★</span><span>PRINT-READY · 24H TURNAROUND</span>
+      <span>★</span><span>EST. 2019 — LAGOS</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 2: ABOUT HBEE DESIGNS / ABOUT HABEEB
+  ============================================================ -->
+  <section id="about" class="about">
+    <span class="section-num">02 / About</span>
+    <div class="about-grid">
+
+      <!-- Portrait column -->
+      <div class="about-portrait-col">
+        <div class="portrait-wrapper">
+          <img src="habeeb.jpg" alt="Habeeb — founder and designer of HBEE Designs">
+        </div>
+        <div class="portrait-tag">★ THE DESIGNER ★</div>
+      </div>
+
+      <!-- Text column -->
+      <div>
+        <h2 class="about-title reveal">
+          MEET <em>Habeeb</em><br>
+          <span class="stroke-text">DESIGNER &amp;</span><br>
+          <span class="pink-text">FLYER MAKER.</span>
+        </h2>
+        <p class="about-body-text reveal reveal-d1">
+          Habeeb is a graphic designer creating bold, colorful, professional visuals
+          for events, businesses and personal brands. From party flyers and posters
+          to print materials and promotional designs, his work helps people communicate
+          clearly, attract attention and leave a strong impression.
+        </p>
+        <div class="skill-scroll-wrap reveal reveal-d2">
+          <div class="skill-grid">
+            <div class="skill-pill sp-pink">  <span>PRINT</span>  <small>design</small></div>
+            <div class="skill-pill sp-blue">  <span>PARTY</span>  <small>flyers</small></div>
+            <div class="skill-pill sp-yellow"><span>EVENT</span>  <small>graphics</small></div>
+            <div class="skill-pill sp-fg">    <span>BRAND</span>  <small>promos</small></div>
+            <div class="skill-pill sp-pink">  <span>SOCIAL</span> <small>graphics</small></div>
+            <!-- duplicates for seamless mobile scroll loop -->
+            <div class="skill-pill sp-blue skill-dupe">  <span>PRINT</span>  <small>design</small></div>
+            <div class="skill-pill sp-yellow skill-dupe"><span>PARTY</span>  <small>flyers</small></div>
+            <div class="skill-pill sp-fg skill-dupe">    <span>EVENT</span>  <small>graphics</small></div>
+            <div class="skill-pill sp-pink skill-dupe">  <span>BRAND</span>  <small>promos</small></div>
+            <div class="skill-pill sp-blue skill-dupe">  <span>SOCIAL</span> <small>graphics</small></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3: PORTFOLIO (CMS-DRIVEN)
+
+       In production this section is populated from Sanity CMS.
+       Schema: portfolioItem — see CSS comment above for full schema.
+       The owner adds/edits/removes items in Sanity Studio.
+       Setting type = "flyers" places the item under "Party Flyers" tab.
+       Setting type = "print" places it under "Print Designs" tab.
+       Setting type = "brand" places it under "Brand Design" tab.
+  ============================================================ -->
+  <section id="work" class="portfolio">
+
+    <div class="port-head">
+      <span class="section-num">03 / Portfolio</span>
+      <h2 class="port-title reveal">THE <em>archive</em></h2>
+      <p class="port-sub reveal reveal-d1">Click a tab · hover a card · every job print-ready and battle-tested.</p>
+    </div>
+
+    <div class="tabs-bar">
+      <div class="tabs" role="tablist" aria-label="Portfolio categories">
+        <button class="tab-btn is-active" data-tab="flyers" role="tab" aria-selected="true" aria-controls="panel-flyers">
+          <span class="tab-num">01</span>
+          Party Flyers
+          <span class="tab-count">[17]</span>
+        </button>
+        <button class="tab-btn" data-tab="print" role="tab" aria-selected="false" aria-controls="panel-print">
+          <span class="tab-num">02</span>
+          Print Designs
+          <span class="tab-count">[12]</span>
+        </button>
+        <button class="tab-btn" data-tab="brand" role="tab" aria-selected="false" aria-controls="panel-brand">
+          <span class="tab-num">03</span>
+          Brand Design
+          <span class="tab-count">[22]</span>
+        </button>
+      </div>
+      <div class="tabs-status" aria-live="polite">
+        <span class="blink-dot"></span>
+        <span id="tabStatus">NOW SHOWING — FLYERS · 17 pcs</span>
+        <button class="see-more-btn" id="seeMoreBtn" data-panel="panel-flyers">
+          <span class="sm-label">See All</span>
+          <span class="sm-count">+9 more</span>
+          <span class="sm-arrow">↓</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── PARTY FLYERS PANEL ──────────────────────────────────
+         CMS: Each card below = one Sanity portfolioItem doc where type = "flyers"
+    ─────────────────────────────────────────────────────────── -->
+    <div class="port-panel is-active" id="panel-flyers" role="tabpanel" aria-labelledby="tab-flyers">
+      <div class="port-grid">
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/BAD%20BUNNY%20COSTUME.png" alt="Bad Bunny Costume Party">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">01</span>
+            <h3>Bad Bunny Costume Party</h3>
+            <p>Palm Beach Restaurant &amp; Lounge · Atlanta, GA · Nov 1st</p>
+            <span class="port-card-cat">Halloween Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/Palm%20Beach%20(ICE%20CREAM%20SUNDAYS).png" alt="Ice Cream Sundays">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">02</span>
+            <h3>Ice Cream Sundays</h3>
+            <p>Grand Opening · Palm Beach ATL · Grown &amp; Sexy R&amp;B Day Party</p>
+            <span class="port-card-cat">Day Party Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/SOCIAL%20SATURDAYS.png" alt="Social Saturdays">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">03</span>
+            <h3>Social Saturdays</h3>
+            <p>Welcome Back Cruise Party · Mr A's the Club · Houston, TX</p>
+            <span class="port-card-cat">Nightlife Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/SOCIAL%20SAT%20NOV.png" alt="Social Saturdays Nov">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">04</span>
+            <h3>Social Saturdays</h3>
+            <p>DJ Olliemac Presents · Mr A's the Club · Houston, TX</p>
+            <span class="port-card-cat">Nightlife Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/TIME%20SQUARE%20ATL%20NYE%202026.png" alt="NYE 2026 Time Square ATL">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">05</span>
+            <h3>NYE 2026 — Time Square ATL</h3>
+            <p>Palm Beach Restaurant &amp; Lounge · Atlanta, GA · Dec 31st</p>
+            <span class="port-card-cat">New Year's Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/BLACK%20GIRLS%20ROCK%20EDITION.png" alt="Black Girls Rock Edition">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">06</span>
+            <h3>Black Girls Rock Edition</h3>
+            <p>Ft. Erikah, Kai &amp; Patrice · Southern Rockhouse Kitchen · HTX · Oct 5th</p>
+            <span class="port-card-cat">Day Party Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/MEET%20%26%20GREET%20WITH%20MAC%20%26%20JACK%20FLYER.png" alt="Meet & Greet Mac & Jack Fun Cruise 2026">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">07</span>
+            <h3>Meet &amp; Greet — Fun Cruise 2026</h3>
+            <p>On the Mac &amp; Jack · Oct 1st</p>
+            <span class="port-card-cat">Event Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/SUPER%20BOWL%20WATCH%20PARTY.png" alt="Super Bowl Watch Party">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">08</span>
+            <h3>Super Bowl Watch Party</h3>
+            <p>Hosted by Khloe's &amp; Zoe's Sweet Tooth · The Hub · Lafayette, LA · Feb 8th</p>
+            <span class="port-card-cat">Sports Event Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/THANKSGIVING%20FLYER.png" alt="Sunday Funday Friendsgiving">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">09</span>
+            <h3>Sunday Funday Friendsgiving</h3>
+            <p>MR305 Entertainment · Pinhouse · Charlotte, NC</p>
+            <span class="port-card-cat">Holiday Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/BIG%20SMOKE%20MONDAYSS.png" alt="Big Smoke Mondays NFL Game Night">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">10</span>
+            <h3>Big Smoke Mondays</h3>
+            <p>NFL Game Night · Torc Lounge · Humble, TX</p>
+            <span class="port-card-cat">Weekly Event Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/CUSTOMER%20APPRECIATION%20FLYER.png" alt="Customer Appreciation Night">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">11</span>
+            <h3>Customer Appreciation Night</h3>
+            <p>Palm Beach Restaurant &amp; Lounge · Atlanta, GA · Sat Nov 8th</p>
+            <span class="port-card-cat">Event Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/J.BROWN%20THE%20VIBE%20O'LINIST.png" alt="Bread & Butter ft. J. Brown">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">12</span>
+            <h3>Bread &amp; Butter</h3>
+            <p>Ft. J. Brown The Vibe O'linist · Live Music Sunday Brunch · Rockhouse Kitchen · HTX</p>
+            <span class="port-card-cat">Live Music Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/KASHMERE%20HOMECOMING.png" alt="Official Kashmere Homecoming After Party">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">13</span>
+            <h3>Kashmere Homecoming After Party</h3>
+            <p>DJ Olliemac Indamix · Torc Lounge · Humble, TX · Oct 21st</p>
+            <span class="port-card-cat">Homecoming Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/OFFICIAL%20HOMECOMING%20PARTY.png" alt="Official Kashmere High Rams Homecoming Afterparty">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">14</span>
+            <h3>Kashmere High Rams — Homecoming Afterparty</h3>
+            <p>DJ Ollie Mac · Mr A's the Club · Houston, TX · Oct 18th</p>
+            <span class="port-card-cat">Homecoming Flyer</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/3%20POSTERS.png" alt="3 Posters" loading="lazy">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">15</span>
+            <h3>3 Posters</h3>
+            <p>Multi-poster event campaign</p>
+            <span class="port-card-cat">Event Posters</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/BILLBOARD.png" alt="Billboard Design">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">16</span>
+            <h3>Billboard</h3>
+            <p>Large-format billboard artwork</p>
+            <span class="port-card-cat">Billboard</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="Party%20Flyers/POST%20MOCKUP.png" alt="Post Mockup">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">17</span>
+            <h3>Post Mockup</h3>
+            <p>Social media post mockup</p>
+            <span class="port-card-cat">Social Media</span>
+          </div>
+        </a>
+
+      </div>
+      <div class="see-more-bar">
+        <button class="see-more-bar-btn" data-panel="panel-flyers" data-label="Flyers" data-extras="9">
+          <span class="sb-label">See All Flyers</span>
+          <span class="see-more-bar-count">+9 more</span>
+          <span class="sb-arrow">↓</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── PRINT DESIGNS PANEL ────────────────────────────────
+         CMS: Each card below = one Sanity portfolioItem doc where type = "print"
+    ─────────────────────────────────────────────────────────── -->
+    <div class="port-panel" id="panel-print" role="tabpanel" aria-labelledby="tab-print">
+      <div class="port-grid">
+
+        <a class="port-card port-card--multi" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img class="multi-img is-active" src="PRINT%20DESIGNS/ATRADER%20BAG%20WHITE.png" alt="ATrader Bag">
+            <img class="multi-img" src="PRINT%20DESIGNS/ATRADER%20BOX.png" alt="ATrader Box">
+            <img class="multi-img" src="PRINT%20DESIGNS/ATRADER%20GREEN%20NOTEPAD.png" alt="ATrader Notepad">
+            <img class="multi-img" src="PRINT%20DESIGNS/ATRADER%20PEN%20WHITE.png" alt="ATrader Pen">
+            <div class="multi-dots">
+              <button class="multi-dot is-active" aria-label="Bag"></button>
+              <button class="multi-dot" aria-label="Box"></button>
+              <button class="multi-dot" aria-label="Notepad"></button>
+              <button class="multi-dot" aria-label="Pen"></button>
+            </div>
+            <span class="multi-badge">4 items</span>
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">01</span>
+            <h3>ATrader Suite</h3>
+            <p>Bag · Box · Notepad · Pen</p>
+            <span class="port-card-cat">Brand Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-card--multi" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img class="multi-img is-active" src="PRINT%20DESIGNS/B1.png" alt="Print Series 1">
+            <img class="multi-img" src="PRINT%20DESIGNS/B2.png" alt="Print Series 2">
+            <img class="multi-img" src="PRINT%20DESIGNS/B3.png" alt="Print Series 3">
+            <div class="multi-dots">
+              <button class="multi-dot is-active" aria-label="Design 1"></button>
+              <button class="multi-dot" aria-label="Design 2"></button>
+              <button class="multi-dot" aria-label="Design 3"></button>
+            </div>
+            <span class="multi-badge">3 items</span>
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">02</span>
+            <h3>Print Series</h3>
+            <p>3-piece print design set</p>
+            <span class="port-card-cat">Print</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/COMPLIMENTARY%20CARD.png" alt="Complimentary Card">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">08</span>
+            <h3>Complimentary Card</h3>
+            <p>Thank-you card design</p>
+            <span class="port-card-cat">Cards</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/ECO%20RX%20BUS%20CARD%20MOCKUP.png" alt="Eco Rx Business Card">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">09</span>
+            <h3>Eco Rx Business Card</h3>
+            <p>Clean, minimal business card</p>
+            <span class="port-card-cat">Business Cards</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/ECO%20RX%20LETTER.png" alt="Eco Rx Letterhead">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">10</span>
+            <h3>Eco Rx Letterhead</h3>
+            <p>Branded corporate stationery</p>
+            <span class="port-card-cat">Stationery</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/FROSH%20CLOTHING%20BAG%20BLACK.png" alt="Frosh Clothing Bag">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">11</span>
+            <h3>Frosh Clothing Bag</h3>
+            <p>Retail packaging — black bag</p>
+            <span class="port-card-cat">Packaging</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/FROSH%20Tag%20Mockup.png" alt="Frosh Hang Tag">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">12</span>
+            <h3>Frosh Hang Tag</h3>
+            <p>Clothing tag with brand details</p>
+            <span class="port-card-cat">Hang Tags</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/Greeting%20card%20grey.png" alt="Greeting Card">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">13</span>
+            <h3>Greeting Card</h3>
+            <p>Elegant minimal greeting card</p>
+            <span class="port-card-cat">Cards</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/KRA%20BUSINESS%20CARDD.png" alt="KRA Business Card">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">14</span>
+            <h3>KRA Business Card</h3>
+            <p>Bold branded business card</p>
+            <span class="port-card-cat">Business Cards</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/ROMEO%20BROWN%20ACTING%20STUDIO.png" alt="Romeo Brown Acting Studio">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">15</span>
+            <h3>Romeo Brown Acting Studio</h3>
+            <p>Studio identity &amp; print collateral</p>
+            <span class="port-card-cat">Posters</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/SERENITY%20HOMES%20%282%29.png" alt="Serenity Homes">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">16</span>
+            <h3>Serenity Homes</h3>
+            <p>Real estate brand materials</p>
+            <span class="port-card-cat">Brand Print</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="PRINT%20DESIGNS/SimpleFi%20Bag%20Mockup%20PSD.png" alt="SimpleFi Bag">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">17</span>
+            <h3>SimpleFi Bag</h3>
+            <p>Fintech branded merchandise</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+      </div>
+      <div class="see-more-bar">
+        <button class="see-more-bar-btn" data-panel="panel-print" data-label="Print" data-extras="4">
+          <span class="sb-label">See All Print</span>
+          <span class="see-more-bar-count">+4 more</span>
+          <span class="sb-arrow">↓</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── BRAND DESIGN PANEL ────────────────────────────────────
+         CMS: Each card below = one Sanity portfolioItem doc where type = "brand"
+    ─────────────────────────────────────────────────────────── -->
+    <div class="port-panel" id="panel-brand" role="tabpanel" aria-labelledby="tab-brand">
+      <div class="port-grid">
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/9MOBILE%20KEYHOLDER.png" alt="9Mobile Keyholder">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">01</span>
+            <h3>9Mobile Keyholder</h3>
+            <p>Branded corporate merch</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/9MOBILE%20LAPTOP%20STICKER.png" alt="9Mobile Laptop Sticker">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">02</span>
+            <h3>9Mobile Laptop Sticker</h3>
+            <p>Die-cut brand sticker</p>
+            <span class="port-card-cat">Stickers</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/ASO-EBI%201.png" alt="Aso-Ebi Design">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">03</span>
+            <h3>Aso-Ebi</h3>
+            <p>Event fabric &amp; identity design</p>
+            <span class="port-card-cat">Event Graphics</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/BLACK%20ROUNDNECK.png" alt="Black Roundneck Apparel">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">04</span>
+            <h3>Black Roundneck</h3>
+            <p>Custom apparel print design</p>
+            <span class="port-card-cat">Apparel</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/BROCHURE.png" alt="Brochure Design">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">05</span>
+            <h3>Brochure</h3>
+            <p>Multi-page corporate brochure</p>
+            <span class="port-card-cat">Brochure</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/BUTTON%20SHIRT%20SHORT%20SLEEVE%20II.png" alt="Button Shirt Short Sleeve">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">06</span>
+            <h3>Button Shirt</h3>
+            <p>Short sleeve branded shirt</p>
+            <span class="port-card-cat">Apparel</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/COLLAR%20NECK%20SHIRT%20BLACK.png" alt="Collar Neck Shirt Black">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">07</span>
+            <h3>Collar Shirt — Black</h3>
+            <p>Corporate branded polo shirt</p>
+            <span class="port-card-cat">Apparel</span>
+          </div>
+        </a>
+
+        <a class="port-card" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/COLLAR%20NECK%20SHIRT%20WHITE.png" alt="Collar Neck Shirt White">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">08</span>
+            <h3>Collar Shirt — White</h3>
+            <p>Corporate branded polo shirt</p>
+            <span class="port-card-cat">Apparel</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/COMMUNITY%20OUTREACH%20ARTWORK%20DESIGN.png" alt="Community Outreach Artwork">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">09</span>
+            <h3>Community Outreach</h3>
+            <p>Event artwork &amp; campaign design</p>
+            <span class="port-card-cat">Event Design</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/FACE%20CAP%20BLACK.png" alt="Face Cap Black">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">10</span>
+            <h3>Face Cap — Black</h3>
+            <p>Branded cap merchandise</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/FACE%20CAP%20WHITE.png" alt="Face Cap White">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">11</span>
+            <h3>Face Cap — White</h3>
+            <p>Branded cap merchandise</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/GIFT%20SET.png" alt="Gift Set">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">12</span>
+            <h3>Gift Set</h3>
+            <p>Branded corporate gift packaging</p>
+            <span class="port-card-cat">Packaging</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/Keychain.png" alt="Keychain">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">13</span>
+            <h3>Keychain</h3>
+            <p>Custom branded keychain</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/LANYARD%20WHITE.png" alt="Lanyard White">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">14</span>
+            <h3>Lanyard</h3>
+            <p>Branded event lanyard</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/OUTREACH%20NOTEBOOK%20MOCKUP.png" alt="Outreach Notebook">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">15</span>
+            <h3>Outreach Notebook</h3>
+            <p>Community outreach stationery</p>
+            <span class="port-card-cat">Stationery</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/Outreach%20Apron.png" alt="Outreach Apron">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">16</span>
+            <h3>Outreach Apron</h3>
+            <p>Branded outreach apron</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/Outreach%20School%20BackPack.png" alt="Outreach School Backpack">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">17</span>
+            <h3>Outreach Backpack</h3>
+            <p>Branded school bag for outreach</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/Outreach%20Umbrella.png" alt="Outreach Umbrella">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">18</span>
+            <h3>Outreach Umbrella</h3>
+            <p>Branded umbrella for outreach</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/REGALLY%20LOGO.png" alt="Regally Logo">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">19</span>
+            <h3>Regally</h3>
+            <p>Full brand identity — logo design</p>
+            <span class="port-card-cat">Brand Identity</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/Regally%20Bag.png" alt="Regally Bag">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">20</span>
+            <h3>Regally Bag</h3>
+            <p>Luxury branded shopping bag</p>
+            <span class="port-card-cat">Packaging</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:-1.4deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/UMBRELLA.png" alt="Branded Umbrella">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">21</span>
+            <h3>Branded Umbrella</h3>
+            <p>Corporate branded umbrella</p>
+            <span class="port-card-cat">Merchandise</span>
+          </div>
+        </a>
+
+        <a class="port-card port-extra" href="#" style="--rot:1.6deg">
+          <div class="port-card-visual">
+            <img src="BRAND%20DESIGNS/WHITE%20ROUNDNECK.png" alt="White Roundneck Apparel">
+            <div class="port-card-veil"><span>VIEW PROJECT</span><span class="veil-arrow">↗</span></div>
+          </div>
+          <div class="port-card-info">
+            <span class="port-card-num">22</span>
+            <h3>White Roundneck</h3>
+            <p>Custom apparel print design</p>
+            <span class="port-card-cat">Apparel</span>
+          </div>
+        </a>
+
+      </div>
+      <div class="see-more-bar">
+        <button class="see-more-bar-btn" data-panel="panel-brand" data-label="Brand" data-extras="14">
+          <span class="sb-label">See All Brand</span>
+          <span class="see-more-bar-count">+14 more</span>
+          <span class="sb-arrow">↓</span>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       SECTION 4: SERVICES
+  ============================================================ -->
+  <section id="services" class="services">
+    <span class="section-num">04 / Services</span>
+    <h2 class="srv-title reveal">WHAT I MAKE.</h2>
+    <div class="srv-grid">
+      <div class="srv-card srv-pink">
+        <div class="srv-card-top"><span>01</span><span>★</span></div>
+        <h3>Party Flyer Design</h3>
+        <p>Single drops or weekly residency systems.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-blue">
+        <div class="srv-card-top"><span>02</span><span>★</span></div>
+        <h3>Print Design</h3>
+        <p>Posters, brochures, menus, large format.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-yellow">
+        <div class="srv-card-top"><span>03</span><span>★</span></div>
+        <h3>Poster Design</h3>
+        <p>A3 to A1 — print-ready &amp; social cuts.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-cream">
+        <div class="srv-card-top"><span>04</span><span>★</span></div>
+        <h3>Business Cards</h3>
+        <p>Stationery systems for studios &amp; founders.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-pink">
+        <div class="srv-card-top"><span>05</span><span>★</span></div>
+        <h3>Banner Design</h3>
+        <p>Roll-ups, street banners, stage backdrops.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-blue">
+        <div class="srv-card-top"><span>06</span><span>★</span></div>
+        <h3>Brochure &amp; Menu</h3>
+        <p>Multi-page editorial print pieces.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-yellow">
+        <div class="srv-card-top"><span>07</span><span>★</span></div>
+        <h3>Brand Promo Graphics</h3>
+        <p>Launch suites, campaign visuals.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-cream">
+        <div class="srv-card-top"><span>08</span><span>★</span></div>
+        <h3>Social Media Design</h3>
+        <p>IG, X, LinkedIn — full feed systems.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-pink">
+        <div class="srv-card-top"><span>09</span><span>★</span></div>
+        <h3>Event Graphics</h3>
+        <p>Save-the-date to step-and-repeat.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+      <div class="srv-card srv-blue">
+        <div class="srv-card-top"><span>10</span><span>★</span></div>
+        <h3>Custom Requests</h3>
+        <p>If it has a deadline, send the brief.</p>
+        <div class="srv-card-bot">PRICED ON BRIEF →</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5: SELECTED JOBS (CMS-DRIVEN)
+
+       In production this section is populated from Sanity CMS.
+       Schema: selectedJob — see CSS comment above for full schema.
+       The owner adds/edits/removes/reorders jobs in Sanity Studio.
+       Setting featured = true promotes a job to the top of the list.
+  ============================================================ -->
+  <section class="selected">
+    <span class="section-num">05 / Selected Jobs</span>
+    <h2 class="selected-title reveal">SELECTED <em>jobs.</em></h2>
+    <div class="cases-list">
+
+      <!-- CMS: selectedJob — Time Square ATL NYE 2026 (featured: true) -->
+      <article class="case-item case-pink reveal">
+        <div class="case-poster">
+          <!-- CMS: mainImage from Sanity portfolioItem -->
+          <img src="Party%20Flyers/TIME%20SQUARE%20ATL%20NYE%202026.png" alt="Time Square ATL — NYE 2026 Party Flyer">
+        </div>
+        <div class="case-info">
+          <span class="case-n">CASE 01 · PARTY FLYER</span>
+          <h3>Time Square ATL — NYE 2026</h3>
+          <span class="case-type">Event Flyer · Atlanta, GA</span>
+          <div class="case-row">
+            <strong>GOAL</strong>
+            <p>A premium New Year's Eve flyer bold enough to work as a full-bleed print poster and still stop the scroll as an IG story.</p>
+          </div>
+          <div class="case-row">
+            <strong>OUTCOME</strong>
+            <p>High-energy flyer deployed across print, socials and venue screens. Sold-out night.</p>
+          </div>
+          <a class="case-link" href="#">VIEW PROJECT →</a>
+        </div>
+      </article>
+
+      <!-- CMS: selectedJob — Romeo Brown Acting Studio -->
+      <article class="case-item case-blue reveal">
+        <div class="case-poster">
+          <!-- CMS: mainImage from Sanity portfolioItem -->
+          <img src="PRINT%20DESIGNS/ROMEO%20BROWN%20ACTING%20STUDIO.png" alt="Romeo Brown Acting Studio — Print Design">
+        </div>
+        <div class="case-info">
+          <span class="case-n">CASE 02 · PRINT DESIGN</span>
+          <h3>Romeo Brown Acting Studio</h3>
+          <span class="case-type">Studio Identity · Print Collateral</span>
+          <div class="case-row">
+            <strong>GOAL</strong>
+            <p>Print collateral for a creative acting studio — bold enough to command attention on promo boards and in waiting rooms.</p>
+          </div>
+          <div class="case-row">
+            <strong>OUTCOME</strong>
+            <p>Cinematic poster suite and stationery system that immediately elevated the studio's brand presence.</p>
+          </div>
+          <a class="case-link" href="#">VIEW PROJECT →</a>
+        </div>
+      </article>
+
+      <!-- CMS: selectedJob — Regally -->
+      <article class="case-item case-yellow reveal">
+        <div class="case-poster">
+          <!-- CMS: mainImage from Sanity portfolioItem -->
+          <img src="BRAND%20DESIGNS/COMMUNITY%20OUTREACH%20ARTWORK%20DESIGN.png" alt="Community Outreach — Brand Campaign Design">
+        </div>
+        <div class="case-info">
+          <span class="case-n">CASE 03 · BRAND DESIGN</span>
+          <h3>Community Outreach Campaign</h3>
+          <span class="case-type">Brand Campaign · Artwork Design</span>
+          <div class="case-row">
+            <strong>GOAL</strong>
+            <p>A complete campaign artwork system for a community outreach programme — bold, warm, and built to travel across print and digital.</p>
+          </div>
+          <div class="case-row">
+            <strong>OUTCOME</strong>
+            <p>Full suite of branded assets deployed across merchandise, print collateral and event materials.</p>
+          </div>
+          <a class="case-link" href="#">VIEW PROJECT →</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 6: PROCESS
+  ============================================================ -->
+  <section id="process" class="process">
+    <span class="section-num">06 / Process</span>
+    <h2 class="process-title reveal">FROM BRIEF <em>to</em> PRINT.</h2>
+    <ol class="process-list">
+      <li class="proc-item reveal">
+        <div class="proc-num-circle">1</div>
+        <div class="proc-body">
+          <h4>BRIEF</h4>
+          <p>Send the project, deadline &amp; references.</p>
+        </div>
+        <div class="proc-arrow">→</div>
+      </li>
+      <li class="proc-item reveal reveal-d1">
+        <div class="proc-num-circle">2</div>
+        <div class="proc-body">
+          <h4>DETAILS</h4>
+          <p>We sharpen scope, tone, deliverables &amp; sizes.</p>
+        </div>
+        <div class="proc-arrow">→</div>
+      </li>
+      <li class="proc-item reveal reveal-d2">
+        <div class="proc-num-circle">3</div>
+        <div class="proc-body">
+          <h4>CONCEPT</h4>
+          <p>First-round design — 1–2 directions.</p>
+        </div>
+        <div class="proc-arrow">→</div>
+      </li>
+      <li class="proc-item reveal reveal-d3">
+        <div class="proc-num-circle">4</div>
+        <div class="proc-body">
+          <h4>REVISIONS</h4>
+          <p>Up to 3 rounds of refinement.</p>
+        </div>
+        <div class="proc-arrow">→</div>
+      </li>
+      <li class="proc-item reveal reveal-d4">
+        <div class="proc-num-circle">5</div>
+        <div class="proc-body">
+          <h4>DELIVERY</h4>
+          <p>Print-ready files + social cuts shipped.</p>
+        </div>
+        <div class="proc-arrow">✓</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============================================================
+       SECTION 7: TESTIMONIALS (CMS-DRIVEN)
+
+       In production this section is populated from Sanity CMS.
+       Schema: testimonial — see CSS comment above for full schema.
+       The owner adds/edits/removes/reorders testimonials in Sanity Studio.
+  ============================================================ -->
+  <section class="testimonials">
+    <span class="section-num">07 / Reception</span>
+    <h2 class="tst-title reveal">CLIENTS <em>say</em>.</h2>
+    <div class="tst-grid">
+
+      <!-- CMS: testimonial document — Tunde A. -->
+      <div class="tst-card tst-pink reveal" style="--rot:-1.5deg">
+        <span class="tst-mark">"</span>
+        <!-- CMS: testimonialText from Sanity -->
+        <p class="tst-quote">HBEE understood the vibe immediately and delivered a flyer that looked clean, bold and unmistakably ours.</p>
+        <footer class="tst-footer">
+          <!-- CMS: clientName, clientRole, clientCompany from Sanity -->
+          <strong>Tunde A.</strong>
+          <span>Promoter, Social Saturdays</span>
+        </footer>
+      </div>
+
+      <!-- CMS: testimonial document — Ifeoma E. -->
+      <div class="tst-card tst-blue reveal reveal-d1" style="--rot:1.5deg">
+        <span class="tst-mark">"</span>
+        <p class="tst-quote">The brochure system completely changed how the brand reads in print. Clients keep asking who designed it.</p>
+        <footer class="tst-footer">
+          <strong>Ifeoma E.</strong>
+          <span>Director, Romeo Brown Acting Studio</span>
+        </footer>
+      </div>
+
+      <!-- CMS: testimonial document — Marcus O. -->
+      <div class="tst-card tst-yellow reveal reveal-d2" style="--rot:-1.5deg">
+        <span class="tst-mark">"</span>
+        <p class="tst-quote">Fast turnaround, sharp typography, and not a single generic stock asset. Booked again the next week.</p>
+        <footer class="tst-footer">
+          <strong>Marcus O.</strong>
+          <span>Founder, Regally</span>
+        </footer>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 8: CONTACT / BOOKING CTA
+  ============================================================ -->
+  <section id="contact" class="contact">
+    <div class="contact-marquee" aria-hidden="true">
+      <div class="contact-mq-track">
+        <span>BOOK A DESIGN <i>✦</i> START A PROJECT <i>✦</i> BOOK A DESIGN <i>✦</i> START A PROJECT <i>✦</i></span>
+        <span>BOOK A DESIGN <i>✦</i> START A PROJECT <i>✦</i> BOOK A DESIGN <i>✦</i> START A PROJECT <i>✦</i></span>
+        <span>BOOK A DESIGN <i>✦</i> START A PROJECT <i>✦</i> BOOK A DESIGN <i>✦</i> START A PROJECT <i>✦</i></span>
+      </div>
+    </div>
+    <div class="contact-inner">
+      <span class="section-num">08 / Contact</span>
+      <h2 class="contact-title">
+        NEED A <em>flyer</em> OR<br>
+        PRINT DESIGN THAT<br>
+        <span class="c-blue">STANDS OUT?</span>
+      </h2>
+      <p class="contact-sub">
+        Send your brief and let's create something bold, clean and ready to use.
+        Every project starts with a conversation.
+      </p>
+      <div class="contact-grid">
+        <a class="contact-card cc-dark" href="mailto:hbeedesings001@gmail.com">
+          <span>EMAIL ↗</span>
+          <strong>hbeedesings001@gmail.com</strong>
+        </a>
+        <a class="contact-card cc-blue" href="https://instagram.com/beeb_designz" target="_blank" rel="noopener">
+          <span>INSTAGRAM ↗</span>
+          <strong>@beeb_designz</strong>
+        </a>
+        <a class="contact-card cc-paper" href="https://linkedin.com/in/habeeb-yusuf" target="_blank" rel="noopener">
+          <span>LINKEDIN ↗</span>
+          <strong>Habeeb Yusuf</strong>
+        </a>
+        <a class="contact-card cc-yellow" href="https://twitter.com/Hb_innovations" target="_blank" rel="noopener">
+          <span>TWITTER / X ↗</span>
+          <strong>@Hb_innovations</strong>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 9: FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <div class="foot-big">HBEE<span class="foot-dot">●</span>DESIGNS</div>
+    <div class="foot-copy">
+      <span>© 2026 HBEE Designs</span>
+      <span>Habeeb</span>
+      <span>Lagos, NG</span>
+    </div>
+  </footer>
+
+  <!-- ── Lightbox ──────────────────────────────────────────────── -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="lb-backdrop" id="lbBackdrop"></div>
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+    <button class="lb-prev" id="lbPrev" aria-label="Previous">←</button>
+    <button class="lb-next" id="lbNext" aria-label="Next">→</button>
+    <div class="lb-stage">
+      <img class="lb-img" id="lbImg" src="" alt="">
+      <div class="lb-caption">
+        <div class="lb-caption-left">
+          <span class="lb-title" id="lbTitle"></span>
+          <span class="lb-cat" id="lbCat"></span>
+        </div>
+        <span class="lb-counter" id="lbCounter"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       JAVASCRIPT — Mode toggle, mobile menu, tabs, scroll reveal
+  ================================================================ -->
+  <script>
+    'use strict';
+
+    /* ── Preloader ────────────────────────────────────────────── */
+    (function () {
+      const preloader = document.getElementById('preloader');
+      const plNum     = document.getElementById('plNum');
+      const plBar     = document.getElementById('plBar');
+      const duration  = 3400;
+      const start     = performance.now();
+      document.body.style.overflow = 'hidden';
+
+      function ease(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const n = Math.floor(ease(p) * 100);
+        plNum.textContent    = n;
+        plBar.style.width    = n + '%';
+        if (p < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          plNum.textContent = '100';
+          plBar.style.width = '100%';
+          setTimeout(function () {
+            preloader.classList.add('pl-exit');
+            document.body.style.overflow = '';
+            setTimeout(function () { preloader.remove(); }, 750);
+          }, 280);
+        }
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    /* ── Dark / Light Mode ────────────────────────────────────── */
+    const html        = document.documentElement;
+    const modeToggle  = document.getElementById('modeToggle');
+    const mobileMode  = document.getElementById('mobileModeToggle');
+    const modeIcon    = document.getElementById('modeIcon');
+    const modeLabel   = document.getElementById('modeLabel');
+
+    function applyMode(mode) {
+      html.setAttribute('data-mode', mode);
+      localStorage.setItem('hbee-mode', mode);
+      if (mode === 'dark') {
+        modeIcon.textContent  = '☀';
+        modeLabel.textContent = 'Light';
+        if (mobileMode) mobileMode.textContent = 'Switch to Light';
+      } else {
+        modeIcon.textContent  = '☾';
+        modeLabel.textContent = 'Dark';
+        if (mobileMode) mobileMode.textContent = 'Switch to Dark';
+      }
+    }
+
+    // Restore saved preference on load
+    applyMode(localStorage.getItem('hbee-mode') || 'dark');
+
+    modeToggle.addEventListener('click', () => {
+      applyMode(html.getAttribute('data-mode') === 'dark' ? 'light' : 'dark');
+    });
+    if (mobileMode) {
+      mobileMode.addEventListener('click', () => {
+        applyMode(html.getAttribute('data-mode') === 'dark' ? 'light' : 'dark');
+      });
+    }
+
+    /* ── Mobile Menu ──────────────────────────────────────────── */
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+
+    function openMenu() {
+      mobileMenu.style.display = 'flex';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => mobileMenu.classList.add('is-open'));
+      });
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.remove('is-open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      setTimeout(() => { mobileMenu.style.display = 'none'; }, 380);
+    }
+
+    hamburger.addEventListener('click', openMenu);
+    mobileClose.addEventListener('click', closeMenu);
+    document.querySelectorAll('.mob-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) closeMenu();
+    });
+
+    /* ── Portfolio Tabs ───────────────────────────────────────── */
+    const tabBtns   = document.querySelectorAll('.tab-btn');
+    const tabStatus  = document.getElementById('tabStatus');
+    const seeMoreBtn = document.getElementById('seeMoreBtn');
+    const tabMeta = {
+      flyers: { label: 'FLYERS', count: 17, extras: 9 },
+      print:  { label: 'PRINT',  count: 12, extras: 4 },
+      brand:  { label: 'BRAND',  count: 22, extras: 14 }
+    };
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+
+        tabBtns.forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+
+        document.querySelectorAll('.port-panel').forEach(p => {
+          p.classList.remove('is-active', 'show-all');
+          const barBtn = p.querySelector('.see-more-bar-btn');
+          if (barBtn) {
+            barBtn.classList.remove('is-open');
+            barBtn.querySelector('.sb-label').textContent = 'See All ' + barBtn.dataset.label;
+            barBtn.querySelector('.see-more-bar-count').textContent = '+' + barBtn.dataset.extras + ' more';
+          }
+        });
+        document.getElementById('panel-' + tab).classList.add('is-active');
+
+        const m = tabMeta[tab];
+        tabStatus.textContent = `NOW SHOWING — ${m.label} · ${m.count} pcs`;
+
+        /* reset see-more button for the new tab */
+        seeMoreBtn.dataset.panel = 'panel-' + tab;
+        seeMoreBtn.classList.remove('is-open');
+        seeMoreBtn.querySelector('.sm-label').textContent = 'See All';
+        seeMoreBtn.querySelector('.sm-count').textContent = '+' + m.extras + ' more';
+      });
+    });
+
+    /* ── See More / Collapse ─────────────────────────────────── */
+    function toggleSeeMore(panelId) {
+      const panel = document.getElementById(panelId);
+      const isOpen = panel.classList.toggle('show-all');
+      const extras = panel.querySelectorAll('.port-card.port-extra').length;
+
+      /* sync top pill */
+      seeMoreBtn.classList.toggle('is-open', isOpen);
+      seeMoreBtn.querySelector('.sm-label').textContent = isOpen ? 'See Less' : 'See All';
+      seeMoreBtn.querySelector('.sm-count').textContent = isOpen ? '' : '+' + extras + ' more';
+
+      /* sync bottom bar button for this panel */
+      const barBtn = panel.querySelector('.see-more-bar-btn');
+      if (barBtn) {
+        barBtn.classList.toggle('is-open', isOpen);
+        barBtn.querySelector('.sb-label').textContent = isOpen ? 'See Less' : 'See All ' + barBtn.dataset.label;
+        barBtn.querySelector('.see-more-bar-count').textContent = isOpen ? '' : '+' + extras + ' more';
+      }
+    }
+
+    seeMoreBtn.addEventListener('click', () => toggleSeeMore(seeMoreBtn.dataset.panel));
+
+    document.querySelectorAll('.see-more-bar-btn').forEach(btn => {
+      btn.addEventListener('click', () => toggleSeeMore(btn.dataset.panel));
+    });
+
+    /* ── Scroll Reveal (Intersection Observer) ────────────────── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => revealObs.observe(el));
+
+    /* ── Nav active state on scroll ───────────────────────────── */
+    const sections  = document.querySelectorAll('section[id], header[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a');
+
+    const activeObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        navAnchors.forEach(a => {
+          a.style.opacity = a.getAttribute('href') === '#' + id ? '1' : '0.78';
+        });
+      });
+    }, { threshold: 0.35 });
+
+    sections.forEach(s => activeObs.observe(s));
+
+    /* ── Multi-image card dots ────────────────────────────────── */
+    document.querySelectorAll('.port-card--multi').forEach(card => {
+      const imgs = card.querySelectorAll('.multi-img');
+      const dots = card.querySelectorAll('.multi-dot');
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          imgs.forEach(img => img.classList.remove('is-active'));
+          dots.forEach(d => d.classList.remove('is-active'));
+          imgs[i].classList.add('is-active');
+          dot.classList.add('is-active');
+        });
+      });
+    });
+
+    /* ── Lightbox ─────────────────────────────────────────────── */
+    (function () {
+      const lb       = document.getElementById('lightbox');
+      const lbImg    = document.getElementById('lbImg');
+      const lbTitle  = document.getElementById('lbTitle');
+      const lbCat    = document.getElementById('lbCat');
+      const lbCount  = document.getElementById('lbCounter');
+      const lbCloseBtn = document.getElementById('lbClose');
+      const lbPrevBtn  = document.getElementById('lbPrev');
+      const lbNextBtn  = document.getElementById('lbNext');
+      const backdrop   = document.getElementById('lbBackdrop');
+
+      let gallery = [];
+      let current = 0;
+
+      function getGallery() {
+        const panel = document.querySelector('.port-panel.is-active');
+        return Array.from(panel.querySelectorAll('.port-card')).filter(c => c.querySelector('img'));
+      }
+
+      function render(idx) {
+        const card = gallery[idx];
+        const img  = card.querySelector('.multi-img.is-active') || card.querySelector('img');
+        lbImg.src   = img.src;
+        lbImg.alt   = img.alt;
+        lbTitle.textContent = card.querySelector('h3')?.textContent || '';
+        lbCat.textContent   = card.querySelector('.port-card-cat')?.textContent || '';
+        lbCount.textContent = (idx + 1) + ' / ' + gallery.length;
+      }
+
+      function open(idx) {
+        gallery = getGallery();
+        current = idx;
+        render(current);
+        lb.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        lb.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      function go(n) {
+        current = (n + gallery.length) % gallery.length;
+        lbImg.classList.add('lb-switching');
+        setTimeout(() => {
+          render(current);
+          lbImg.classList.remove('lb-switching');
+        }, 160);
+      }
+
+      /* Card click — delegate on each port-grid */
+      document.querySelectorAll('.port-grid').forEach(grid => {
+        grid.addEventListener('click', e => {
+          const card = e.target.closest('.port-card');
+          if (!card || !card.querySelector('img')) return;
+          e.preventDefault();
+          const all = getGallery();
+          open(all.indexOf(card));
+        });
+      });
+
+      lbCloseBtn.addEventListener('click', close);
+      backdrop.addEventListener('click', close);
+      lbPrevBtn.addEventListener('click', () => go(current - 1));
+      lbNextBtn.addEventListener('click', () => go(current + 1));
+
+      document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('is-open')) return;
+        if (e.key === 'Escape')     close();
+        if (e.key === 'ArrowLeft')  go(current - 1);
+        if (e.key === 'ArrowRight') go(current + 1);
+      });
+    })();
+
+    /* ── Hero reveal on load ──────────────────────────────────── */
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.hero .reveal').forEach(el => {
+        el.classList.add('visible');
+      });
+    });
+  </script>
+
+</body>
+</html>
