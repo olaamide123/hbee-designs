@@ -89,12 +89,12 @@
        RESET & BASE
     ================================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overflow-x: hidden; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
     body {
       background: var(--bg);
       color: var(--fg);
       font-family: "Space Grotesk", "Inter Tight", system-ui, sans-serif;
-      overflow-x: hidden;
+      overflow-x: clip;
       transition: background 400ms ease, color 400ms ease;
     }
     a { color: inherit; text-decoration: none; }
@@ -202,18 +202,45 @@
 
     .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
-    /* Mode toggle button */
+    /* ── Mode toggle — pill switch ───────────────────────────── */
     .mode-toggle {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 16px; border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 6px 10px 6px 6px; border-radius: 999px;
       border: 1.5px solid var(--line);
-      font-family: "JetBrains Mono", monospace; font-size: 11px;
-      letter-spacing: 0.14em; text-transform: uppercase;
       cursor: pointer; background: transparent; color: var(--fg);
-      transition: all 220ms;
+      transition: border-color 220ms, background 220ms;
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.12em; text-transform: uppercase;
     }
     .mode-toggle:hover { border-color: var(--fg); }
-    .mode-icon { font-size: 15px; line-height: 1; }
+    /* the sliding track */
+    .toggle-track {
+      width: 36px; height: 20px; border-radius: 999px;
+      background: var(--line); border: 1.5px solid var(--line);
+      position: relative; flex-shrink: 0;
+      transition: background 300ms, border-color 300ms;
+    }
+    html[data-mode="light"] .toggle-track { background: var(--pink); border-color: var(--pink); }
+    /* the thumb */
+    .toggle-thumb {
+      position: absolute; top: 2px; left: 2px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--fg);
+      transition: transform 280ms cubic-bezier(0.4,0,0.2,1), background 300ms;
+    }
+    html[data-mode="light"] .toggle-thumb { transform: translateX(16px); background: #fff; }
+    .mode-label-text { font-size: 11px; }
+
+    /* ── Mobile icon toggle (always visible in nav on mobile) ─── */
+    .mode-toggle-icon {
+      display: none;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid var(--line);
+      background: transparent; color: var(--fg);
+      cursor: pointer; align-items: center; justify-content: center;
+      font-size: 16px; transition: all 220ms; flex-shrink: 0;
+    }
+    .mode-toggle-icon:hover { border-color: var(--fg); }
 
     /* Nav CTA */
     .nav-cta {
@@ -279,11 +306,12 @@
     }
 
     @media (max-width: 900px) {
-      .nav         { justify-content: space-between; }
-      .nav-links   { display: none; }
-      .nav-cta     { display: none; }
-      .mode-toggle { display: none; }
-      .nav-hamburger { display: flex; }
+      .nav              { justify-content: space-between; }
+      .nav-links        { display: none; }
+      .nav-cta          { display: none; }
+      .mode-toggle      { display: none; }
+      .mode-toggle-icon { display: flex; }
+      .nav-hamburger    { display: flex; }
     }
 
     /* ================================================================
@@ -867,8 +895,9 @@
       padding: 0 24px;
       font-family: "Anton", sans-serif; font-size: 22px; letter-spacing: 0.1em;
       opacity: 0; transition: opacity 240ms;
+      pointer-events: none;
     }
-    .port-card:hover .port-card-veil { opacity: 1; }
+    .port-card:hover .port-card-veil { opacity: 1; pointer-events: none; }
     .veil-arrow { font-size: 30px; }
     .port-card-info { padding-top: 14px; }
     .port-card-num {
@@ -1128,13 +1157,15 @@
       background: var(--bg); color: var(--fg);
       padding: 44px var(--pad);
       border-top: 2px solid var(--fg); transition: background 400ms, color 400ms, border-color 400ms;
+      overflow: hidden;
     }
     .foot-big {
       font-family: "Anton", sans-serif;
-      font-size: clamp(72px, 16vw, 280px);
+      font-size: clamp(52px, 14vw, 280px);
       line-height: 0.85; letter-spacing: 0.02em;
       padding: 20px 0 28px;
-      display: flex; align-items: center; gap: 0.05em;
+      display: flex; align-items: center; justify-content: center; gap: 0.05em;
+      text-align: center; width: 100%;
     }
     .foot-dot { color: var(--pink); }
     .foot-copy {
@@ -1298,7 +1329,7 @@
       .tab-btn    { padding: 10px 14px; font-size: 11px; }
 
       /* Footer wordmark */
-      .foot-big   { font-size: clamp(52px, 17vw, 280px); }
+      .foot-big   { font-size: clamp(40px, 13vw, 280px); }
     }
 
     /* ── iPhone / standard phone (≤375px) ──────────────────────── */
@@ -1354,7 +1385,7 @@
       .contact-card strong { font-size: clamp(18px, 6vw, 36px); }
 
       /* Footer */
-      .foot-big       { font-size: clamp(44px, 16vw, 280px); }
+      .foot-big       { font-size: clamp(36px, 12vw, 280px); }
       .foot-copy      { font-size: 10px; }
     }
   </style>
@@ -1407,8 +1438,11 @@
 
     <div class="nav-right">
       <button class="mode-toggle" id="modeToggle" aria-label="Toggle colour mode">
-        <span class="mode-icon" id="modeIcon">☀</span>
-        <span id="modeLabel">Light</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="mode-label-text" id="modeLabel">Light</span>
+      </button>
+      <button class="mode-toggle-icon" id="modeToggleIcon" aria-label="Toggle colour mode">
+        <span id="modeIconMobile">☀</span>
       </button>
       <a href="#contact" class="nav-cta">
         <span class="nav-cta-dot"></span>
@@ -2839,36 +2873,35 @@
 
     /* ── Dark / Light Mode ────────────────────────────────────── */
     const html        = document.documentElement;
-    const modeToggle  = document.getElementById('modeToggle');
-    const mobileMode  = document.getElementById('mobileModeToggle');
-    const modeIcon    = document.getElementById('modeIcon');
-    const modeLabel   = document.getElementById('modeLabel');
+    const modeToggle     = document.getElementById('modeToggle');
+    const modeToggleIcon = document.getElementById('modeToggleIcon');
+    const mobileMode     = document.getElementById('mobileModeToggle');
+    const modeLabel      = document.getElementById('modeLabel');
+    const modeIconMobile = document.getElementById('modeIconMobile');
 
     function applyMode(mode) {
       html.setAttribute('data-mode', mode);
       localStorage.setItem('hbee-mode', mode);
       if (mode === 'dark') {
-        modeIcon.textContent  = '☀';
-        modeLabel.textContent = 'Light';
-        if (mobileMode) mobileMode.textContent = 'Switch to Light';
+        if (modeLabel)      modeLabel.textContent      = 'Dark';
+        if (modeIconMobile) modeIconMobile.textContent = '☾';
+        if (mobileMode)     mobileMode.textContent     = 'Switch to Light';
       } else {
-        modeIcon.textContent  = '☾';
-        modeLabel.textContent = 'Dark';
-        if (mobileMode) mobileMode.textContent = 'Switch to Dark';
+        if (modeLabel)      modeLabel.textContent      = 'Light';
+        if (modeIconMobile) modeIconMobile.textContent = '☀';
+        if (mobileMode)     mobileMode.textContent     = 'Switch to Dark';
       }
     }
 
     // Restore saved preference on load
     applyMode(localStorage.getItem('hbee-mode') || 'dark');
 
-    modeToggle.addEventListener('click', () => {
+    function toggleMode() {
       applyMode(html.getAttribute('data-mode') === 'dark' ? 'light' : 'dark');
-    });
-    if (mobileMode) {
-      mobileMode.addEventListener('click', () => {
-        applyMode(html.getAttribute('data-mode') === 'dark' ? 'light' : 'dark');
-      });
     }
+    modeToggle.addEventListener('click', toggleMode);
+    if (modeToggleIcon) modeToggleIcon.addEventListener('click', toggleMode);
+    if (mobileMode) mobileMode.addEventListener('click', toggleMode);
 
     /* ── Mobile Menu ──────────────────────────────────────────── */
     const hamburger  = document.getElementById('hamburger');
